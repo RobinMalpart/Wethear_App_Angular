@@ -11,9 +11,9 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  signup(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signup`, { username, password }).pipe(
-      map((response: any) => response.token),
+  signup(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users`, { email, password }).pipe(
+      map((response: any) => response),
       catchError((error) => {
         console.error('Signup error:', error);
         return throwError(() => new Error('An error occurred during signup'));
@@ -21,17 +21,24 @@ export class AuthService {
     );
   }
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { username, password }).pipe(
-      map((response: any) => {
-        localStorage.setItem('authToken', response.token);
-        return response.token;
-      }),
-      catchError((error) => {
-        console.error('Login error:', error);
-        return throwError(() => new Error('An error occurred during login'));
-      })
-    );
+  login(email: string, password: string): Observable<any> {
+    return this.http
+      .get<any>(`${this.apiUrl}/users?email=${email}&password=${password}`)
+      .pipe(
+        map((users) => {
+          if (users.length > 0) {
+            const user = users[0];
+            localStorage.setItem('authToken', user.token);
+            return user.token;
+          } else {
+            throw new Error('Invalid credentials');
+          }
+        }),
+        catchError((error) => {
+          console.error('Login error:', error);
+          return throwError(() => new Error('An error occurred during login'));
+        })
+      );
   }
 
   isAuthenticated(): boolean {
