@@ -11,9 +11,14 @@
       "password": "hello"
     },
     {
-      "id": "4a25",
-      "email": "hello@hello.com",
+      "id": "60f0",
+      "email": "hello2@hello.com",
       "password": "hello"
+    },
+    {
+      "id": "df5c",
+      "email": "tete@noeud.com",
+      "password": "nouille"
     }
   ],
   "locations": [

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup-form',
@@ -10,7 +12,12 @@ import { AuthService } from '../../services/auth.service';
 export class SignupFormComponent implements OnInit {
   signupForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -25,11 +32,16 @@ export class SignupFormComponent implements OnInit {
       this.authService.signup(email, password).subscribe(
         (response) => {
           console.log('Signup successful:', response);
-          // Redirection ou affichage d’un message de succès
+          this.snackBar.open('Signup successful!', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/login']); // Redirection ou affichage d’un message de succès
         },
         (error) => {
           console.error('Signup failed:', error);
-          // Afficher un message d’erreur
+          this.snackBar.open('Signup failed: ' + error.message, 'Close', {
+            duration: 5000,
+          });
         }
       );
     }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +12,14 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users`, { email, password }).pipe(
-      map((response: any) => response),
+    return this.http.get<any[]>(`${this.apiUrl}/users?email=${email}`).pipe(
+      switchMap((users) => {
+        if (users.length > 0) {
+          return throwError(() => new Error('Email already exists'));
+        } else {
+          return this.http.post(`${this.apiUrl}/users`, { email, password });
+        }
+      }),
       catchError((error) => {
         console.error('Signup error:', error);
         return throwError(() => new Error('An error occurred during signup'));
@@ -23,7 +29,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     return this.http
-      .get<any>(`${this.apiUrl}/users?email=${email}&password=${password}`)
+      .get<any[]>(`${this.apiUrl}/users?email=${email}&password=${password}`)
       .pipe(
         map((users) => {
           if (users.length > 0) {
