@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -10,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class LoginFormComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -22,8 +23,16 @@ export class LoginFormComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-      console.log('Login successful:', { username, password });
-      // Ajoutez ici la logique de connexion
+      this.authService.login(username, password).subscribe(
+        (token) => {
+          console.log('Login successful:', token);
+          this.router.navigate(['/protected']); // Redirige vers une route protégée
+        },
+        (error) => {
+          console.error('Login failed:', error);
+          // Afficher un message d'erreur
+        }
+      );
     }
   }
 }
