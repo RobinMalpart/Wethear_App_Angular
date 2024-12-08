@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+/* Body style*/
+
+html {
+    @apply h-full;
+    }
+
+body {
+    @apply bg-gradient-to-br from-[#85CEF9] to-[#57B8F2] text-white h-full;
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    font-style: normal
+    }
+
+/* Header styles */
+
+.btnGlassHeader {
+    @apply glassmorph font-bold py-2 px-4 rounded-b-md border-x border-b border-t-0 border-white/75 h-fit;
+    }
+
+.glassBorderHeader {
+    @apply rounded-b-md border-x border-b border-t-0 border-white/75;
+    }
+
+/* General styles */
+
+.glassmorph {
+    @apply bg-white text-white bg-opacity-20 backdrop-filter backdrop-blur-xl;
+    }
+
+.glassBorder {
+    @apply border border-white/75;
+    }
+
+.btnGlass {
+    @apply glassmorph glassBorder font-bold py-2 px-4 rounded-b-md;
+    }
+
+button {
+    @apply transition-all duration-300 ease-in-out;
+    }
+
+button:hover {
+    @apply bg-gray-950/20;
+    }

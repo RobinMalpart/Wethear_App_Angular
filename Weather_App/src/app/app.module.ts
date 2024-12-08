@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { CommonModule } from '@angular/common';
+import { HomeComponent } from './components/home/home.component';
+import { HeaderComponent } from './components/header/header.component';
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
-  declarations: [AppComponent, AppComponent],
-  imports: [BrowserModule, AppRoutingModule],
+  declarations: [AppComponent, HomeComponent, HeaderComponent, CardComponent],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
