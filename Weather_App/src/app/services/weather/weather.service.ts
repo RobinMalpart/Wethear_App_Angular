@@ -1,3 +1,4 @@
+// src/app/weather.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -26,13 +27,11 @@ export class WeatherService {
       this.getCoordinates(cityName).subscribe(
         (data: any[]) => {
           if (data.length > 0) {
-            this.getWeather(data[0].lat, data[0].lon).subscribe(
+            const lat = data[0].lat;
+            const lon = data[0].lon;
+            this.getWeather(lat, lon).subscribe(
               weatherData => {
-                observer.next({
-                  weather: weatherData.weather[0].description,
-                  temperature: weatherData.main.temp,
-                  feelsLike: weatherData.main.feels_like
-                });
+                observer.next(weatherData);
                 observer.complete();
               },
               error => observer.error(error)
