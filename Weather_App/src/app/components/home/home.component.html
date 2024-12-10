@@ -1,185 +1,35 @@
 <h2>Favorite</h2>
-<hr class="my-3">
-<div class="grid grid-cols-6 gap-4">
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
+  <hr class="my-2">
+<div class="grid grid-cols-6 gap-4 mb-5">
+  <app-card
+    *ngFor="let item of favoriteCity"
+    [city]="item.city"
+    [weather]="item.weather"
+    [temperature]="item.temperature"
+    [feelsLike]="item.feelsLike">
+  </app-card>
 </div>
 
 <h2>Last seens</h2>
-<hr class="my-3">
-<div class="grid grid-cols-6 gap-4">
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
+  <hr class="my-2">
+<div class="grid grid-cols-6 gap-4 mb-5">
+  <app-card
+    *ngFor="let item of lastSeenCity"
+    [city]="item.city"
+    [weather]="item.weather"
+    [temperature]="item.temperature"
+    [feelsLike]="item.feelsLike">
+  </app-card>
 </div>
 
-<h2>Most views</h2>
-<hr class="my-3">
-<div class="grid grid-cols-6 gap-4">
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
-  <div class="card glassmorph glassBorder">
-    <div class="card-body px-4 py-2">
-      <h2 class="card-title">Paris</h2>
-      <div>
-        <p class="card-text">Sunny ☀️</p>
-        <p class="card-text">25°C</p>
-        <p class="card-text">28°C Feels like</p>
-      </div>
-    </div>
-  </div>
+<h2>Top French Cities</h2>
+  <hr class="my-2">
+<div class="grid grid-cols-6 gap-4 mb-5">
+  <app-card
+    *ngFor="let item of topFrenchCity"
+    [city]="item.city"
+    [weather]="item.weather"
+    [temperature]="item.temperature"
+    [feelsLike]="item.feelsLike">
+  </app-card>
 </div>
-
-
-
-
-<!-- <h2>Favorite</h2>
-<hr>
-<div *ngFor="let favorite of favorites">
-  <app-favorite [favorite]="favorite"></app-favorite>
-</div>
-
-<h2>Last seens</h2>
-<hr>
-<div *ngFor="let lastSeen of lastSeens">
-  <app-last-seen [lastSeen]="lastSeen"></app-last-seen>
-</div>
-
-<h2>Most views</h2>
-<hr>
-<div *ngFor="let mostView of mostViews">
-  <app-most-view [mostView]="mostView"></app-most-view>
-</div> -->
