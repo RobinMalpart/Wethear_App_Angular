@@ -1,0 +1,92 @@
+<div
+  class="card glassmorph p-6 rounded-2xl shadow-lg transition-transform transform hover:scale-105 bg-white dark:bg-gray-800"
+>
+  <div
+    class="flex flex-col md:flex-row items-center md:items-start md:space-x-6"
+  >
+    <div class="text-center md:text-left mb-4 md:mb-0">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+        {{ locationName }}
+      </h2>
+      <h2 class="text-sm text-gray-500 dark:text-gray-300">Weather forecast for the next 3 days</h2>
+    </div>
+  </div>
+
+  <hr class="my-6 border-gray-300 dark:border-gray-600" />
+
+  <!-- First Day Container -->
+  <div *ngIf="firstDayWeather.length > 0">
+    <h3 class="text-md font-bold mb-2 text-black">
+      {{ firstDayWeather[0].day | date : "EEEE, MMMM d" : "" : "en-US" }}
+    </h3>
+    <div class="overflow-x-auto mb-5">
+      <div class="flex space-x-4">
+        <div
+          *ngFor="let weather of firstDayWeather"
+          class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+        >
+          <p class="font-bold text-gray-900 text-sm">
+            {{ weather.temperature | tempConverter: unit }}°{{ unit }}
+          </p>
+          <img
+            [src]="weather.iconUrl"
+            [alt]="weather.weather"
+            class="w-10 h-10 my-1"
+          />
+          <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Second Day Container -->
+  <div *ngIf="secondDayWeather.length > 0">
+    <h3 class="text-md font-bold mb-2 text-black">
+      {{ secondDayWeather[0].day | date : "EEEE, MMMM d" : "" : "en-US" }}
+    </h3>
+    <div class="overflow-x-auto mb-5">
+      <div class="flex space-x-4">
+        <div
+          *ngFor="let weather of secondDayWeather"
+          class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+        >
+          <p class="font-bold text-gray-900 text-sm">
+            {{ weather.temperature | tempConverter: unit}}°{{ unit }}
+          </p>
+          <img
+            [src]="weather.iconUrl"
+            [alt]="weather.weather"
+            class="w-10 h-10 my-1"
+          />
+
+          <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Third Day Container -->
+  <div *ngIf="thirdDayWeather.length > 0">
+    <h3 class="text-md font-bold mb-2 text-black">
+      {{ thirdDayWeather[0].day | date : "EEEE, MMMM d" : "" : "en-US" }}
+    </h3>
+    <div class="overflow-x-auto">
+      <div class="flex space-x-4">
+        <div
+          *ngFor="let weather of thirdDayWeather"
+          class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+        >
+          <p class="font-bold text-gray-900 text-sm">
+            {{ weather.temperature | tempConverter: unit }}°{{ unit }}
+          </p>
+          <img
+            [src]="weather.iconUrl"
+            [alt]="weather.weather"
+            class="w-10 h-10 my-1"
+          />
+          <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
