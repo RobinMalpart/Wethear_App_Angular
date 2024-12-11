@@ -1,0 +1,125 @@
+<!-- daily-detailed-card.component.html -->
+
+<div
+  class="card bg-base-100 w-full max-w-4xl shadow-xl p-4 flex flex-col space-y-4"
+>
+  <!-- Grid Section -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
+    <!-- First Column: Weather Summary -->
+    <div
+      class="col-span-1 border border-gray-300 rounded-lg flex flex-col justify-center p-3 bg-blue-50 dark:bg-gray-800"
+    >
+    <h2 class="text-lg text-center font-semibold">
+      {{ locationName }}
+      <span class="block text-lg text-center font-normal mt-1">
+        {{ currentDate | date:'EEEE, MMMM d':'':'en-US' }}
+      </span>
+    </h2>
+
+      <!-- Display Current Weather Icon -->
+      <div class="flex justify-center my-2">
+        <img
+          [src]="currentWeatherIconUrl"
+          [alt]="weatherDescription"
+          class="w-16 h-16"
+        />
+      </div>
+
+      <p class="text-sm text-gray-500 text-center">
+        {{ weatherDescription }}
+      </p>
+
+      <p class="text-2xl font-bold text-center mb-1">
+        {{ mainTemperature }} °C
+      </p>
+    </div>
+
+    <!-- Weather Details -->
+    <div class="col-span-2 grid grid-cols-2 gap-2">
+      <!-- Feels Like -->
+      <div
+        class="border border-gray-300 rounded-lg text-center flex flex-col justify-center p-2 bg-white dark:bg-gray-700"
+      >
+        <p class="text-gray-500 text-xs">Feels Like</p>
+        <p class="font-bold text-gray-900 text-sm">
+          {{ feelsLikeTemperature || 0 }} °C
+        </p>
+      </div>
+      <!-- Wind -->
+      <div
+        class="border border-gray-300 rounded-lg text-center flex flex-col justify-center p-2 bg-white dark:bg-gray-700"
+      >
+        <p class="text-gray-500 text-xs">Wind</p>
+        <p class="font-bold text-gray-900 text-sm">
+          {{ windSpeed || 0 }} m/s
+        </p>
+      </div>
+      <!-- Humidity -->
+      <div
+        class="border border-gray-300 rounded-lg text-center flex flex-col justify-center p-2 bg-white dark:bg-gray-700"
+      >
+        <p class="text-gray-500 text-xs">Humidity</p>
+        <p class="font-bold text-gray-900 text-sm">
+          {{ humidity || 0 }}%
+        </p>
+      </div>
+      <!-- Clouds -->
+      <div
+        class="border border-gray-300 rounded-lg text-center flex flex-col justify-center p-2 bg-white dark:bg-gray-700"
+      >
+        <p class="text-gray-500 text-xs">Clouds</p>
+        <p class="font-bold text-gray-900 text-sm">
+          {{ cloudCoverage || 0 }}%
+        </p>
+      </div>
+      <!-- Min Temperature -->
+      <div
+        class="border border-gray-300 rounded-lg text-center flex flex-col justify-center p-2 bg-white dark:bg-gray-700"
+      >
+        <p class="text-gray-500 text-xs">Min Temp</p>
+        <p class="font-bold text-gray-900 text-sm">
+          {{ minTemperature || 0 }} °C
+        </p>
+      </div>
+      <!-- Max Temperature -->
+      <div
+        class="border border-gray-300 rounded-lg text-center flex flex-col justify-center p-2 bg-white dark:bg-gray-700"
+      >
+        <p class="text-gray-500 text-xs">Max Temp</p>
+        <p class="font-bold text-gray-900 text-sm">
+          {{ maxTemperature || 0 }} °C
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next 24 Hours -->
+  <h2 class="text-lg font-semibold mb-2">Current 24 Hours Details</h2>
+  <!-- Grid with 4 columns on small screens and up -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+    <!-- Loop through the oneDayWeather array -->
+    <div
+      *ngFor="let weather of oneDayWeather"
+      class="border border-gray-300 rounded-lg p-2 bg-white dark:bg-gray-700 flex flex-col items-center"
+    >
+      <!-- Use DatePipe to format the day -->
+      <p class="text-gray-500 text-xs">
+        {{ weather.day | date:'EEEE, MMMM d':'':'en-US' }}
+      </p>
+
+      <!-- Display temperature -->
+      <p class="font-bold text-gray-900 text-sm">{{ weather.temperature }}°C</p>
+
+      <!-- Display Weather Icon -->
+      <img
+        [src]="weather.iconUrl"
+        [alt]="weather.weather"
+        class="w-10 h-10 my-1"
+      />
+
+      <!-- Display the time -->
+      <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+    </div>
+  </div>
+</div>
+

@@ -44,4 +44,9 @@ export class WeatherService {
       );
     });
   }
+
+  get5DaysWeather(lat: number, lon: number): Observable<any> {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric`;
+    return this.http.get<any>(url);
+  }
 }

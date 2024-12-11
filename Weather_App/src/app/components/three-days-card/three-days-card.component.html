@@ -1,0 +1,32 @@
+<div
+  class="card bg-base-100 w-full max-w-4xl shadow-xl p-4 flex flex-col space-y-4"
+>
+  <!-- Next 24 Hours -->
+  <h2 class="text-lg font-semibold mb-2">Next three days </h2>
+  <!-- Grid with 4 columns on small screens and up -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+    <!-- Loop through the oneDayWeather array -->
+    <div
+      *ngFor="let weather of threeDaysWeather"
+      class="border border-gray-300 rounded-lg p-2 bg-white dark:bg-gray-700 flex flex-col items-center"
+    >
+      <!-- Use DatePipe to format the day -->
+      <p class="text-gray-500 text-xs">
+        {{ weather.day | date:'EEEE, MMMM d':'':'en-US' }}
+      </p>
+
+      <!-- Display temperature -->
+      <p class="font-bold text-gray-900 text-sm">{{ weather.temperature }}°C</p>
+
+      <!-- Display Weather Icon -->
+      <img
+        [src]="weather.iconUrl"
+        [alt]="weather.weather"
+        class="w-10 h-10 my-1"
+      />
+
+      <!-- Display the time -->
+      <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+    </div>
+  </div>
+</div>
