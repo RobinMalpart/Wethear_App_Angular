@@ -2,6 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { JsonServerService } from 'src/app/services/jsonServer/user.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 
@@ -34,7 +35,6 @@ export class LocationComponent implements OnInit, OnDestroy {
   oneDayWeather: any[] = [];
   threeDaysWeather: any[] = [];
 
-
   currentWeatherType: string = 'daily';
   unit: string = 'C';
 
@@ -43,17 +43,20 @@ export class LocationComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private weatherService: WeatherService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private jsonServerService: JsonServerService
   ) {}
 
   ngOnInit(): void {
     // Subscribe to error messages from SharedService
-    this.errorSubscription = this.sharedService.errorMessage$.subscribe(message => {
-      this.errorMessage = message ?? '';
-    });
+    this.errorSubscription = this.sharedService.errorMessage$.subscribe(
+      (message) => {
+        this.errorMessage = message ?? '';
+      }
+    );
 
     // Subscribe to query parameters
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       const city = params['city']?.trim();
       this.unit = params['unit'] === 'F' ? 'F' : 'C';
       const timeOption = params['time'] === '3 Days' ? 'next-3-days' : 'daily';
@@ -85,13 +88,34 @@ export class LocationComponent implements OnInit, OnDestroy {
           if (data && data.length > 0) {
             const { lat, lon } = data[0];
             this.getTodayWeatherData(lat, lon);
+
+            // Subscribe to addLocationAndSearch Observable
+            // change with userId
+            this.jsonServerService
+              .addLocationAndSearch('1', city, lat, lon)
+              .subscribe({
+                next: (result) => {
+                  console.log('Location and Search added:', result);
+                  // Optionally, display a success message to the user
+                },
+                error: (error) => {
+                  console.error('Error adding Location and Search:', error);
+                  this.sharedService.setErrorMessage(
+                    'Failed to record your search.'
+                  );
+                },
+              });
           } else {
-            this.sharedService.setErrorMessage('City not found. Please try again.');
+            this.sharedService.setErrorMessage(
+              'City not found. Please try again.'
+            );
             this.hasSearched = false;
           }
         },
         error: () => {
-          this.sharedService.setErrorMessage('Error fetching data. Please try again.');
+          this.sharedService.setErrorMessage(
+            'Error fetching data. Please try again.'
+          );
           this.hasSearched = false;
         },
       });
@@ -101,13 +125,33 @@ export class LocationComponent implements OnInit, OnDestroy {
           if (data && data.length > 0) {
             const { lat, lon } = data[0];
             this.getThreeDaysWeatherData(lat, lon);
+            // Subscribe to addLocationAndSearch Observable
+            // change with userId
+            this.jsonServerService
+              .addLocationAndSearch('1', city, lat, lon)
+              .subscribe({
+                next: (result) => {
+                  console.log('Location and Search added:', result);
+                  // Optionally, display a success message to the user
+                },
+                error: (error) => {
+                  console.error('Error adding Location and Search:', error);
+                  this.sharedService.setErrorMessage(
+                    'Failed to record your search.'
+                  );
+                },
+              });
           } else {
-            this.sharedService.setErrorMessage('City not found. Please try again.');
+            this.sharedService.setErrorMessage(
+              'City not found. Please try again.'
+            );
             this.hasSearched = false;
           }
         },
         error: (err) => {
-          this.sharedService.setErrorMessage('Error fetching data. Please try again.');
+          this.sharedService.setErrorMessage(
+            'Error fetching data. Please try again.'
+          );
           this.hasSearched = false;
         },
       });
@@ -115,7 +159,9 @@ export class LocationComponent implements OnInit, OnDestroy {
       if (city.length === 0) {
         this.sharedService.setErrorMessage('Please enter a valid city name.');
       } else {
-        this.sharedService.setErrorMessage('Selected weather type is not supported.');
+        this.sharedService.setErrorMessage(
+          'Selected weather type is not supported.'
+        );
       }
     }
   }
@@ -153,9 +199,11 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (err) => {
-        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
+        this.sharedService.setErrorMessage(
+          'Error fetching weather forecast data.'
+        );
         this.hasSearched = false;
-        this.isLoading = false; 
+        this.isLoading = false;
       },
     });
   }
@@ -166,7 +214,7 @@ export class LocationComponent implements OnInit, OnDestroy {
       next: (fiveDaysWeatherData) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-  
+
         // Extracting data for the next 3 days (assuming 8 entries per day)
         this.threeDaysWeather = fiveDaysWeatherData.list
           .filter((data: any) => {
@@ -178,7 +226,7 @@ export class LocationComponent implements OnInit, OnDestroy {
           .map((data: any) => {
             const iconCode = data.weather[0].icon;
             const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-  
+
             return {
               day: new Date(data.dt * 1000),
               time: this.formatUnixTimestamp(data.dt),
@@ -192,7 +240,9 @@ export class LocationComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error fetching 5 days weather data:', err);
-        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
+        this.sharedService.setErrorMessage(
+          'Error fetching weather forecast data.'
+        );
         this.hasSearched = false;
         this.isLoading = false;
       },
