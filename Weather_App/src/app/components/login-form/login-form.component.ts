@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-form',
@@ -14,7 +15,8 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -28,13 +30,18 @@ export class LoginFormComponent implements OnInit {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
       this.authService.login(email, password).subscribe(
-        (token) => {
-          console.log('Login successful:', token);
-          this.router.navigate(['/protected']); // Redirige vers une route protégée
+        (userId) => {
+          console.log('Login successful:', userId);
+          this.snackBar.open('Login successful!', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/protected']);
         },
         (error) => {
           console.error('Login failed:', error);
-          // Afficher un message d'erreur
+          this.snackBar.open('Login failed: ' + error.message, 'Close', {
+            duration: 5000,
+          });
         }
       );
     }

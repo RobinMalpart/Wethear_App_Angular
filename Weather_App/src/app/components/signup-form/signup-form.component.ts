@@ -35,7 +35,7 @@ export class SignupFormComponent implements OnInit {
           this.snackBar.open('Signup successful!', 'Close', {
             duration: 5000,
           });
-          this.router.navigate(['/login']); // Redirection ou affichage d’un message de succès
+          this.router.navigate(['/login']);
         },
         (error) => {
           console.error('Signup failed:', error);

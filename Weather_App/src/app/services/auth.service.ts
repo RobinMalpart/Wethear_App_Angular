@@ -34,8 +34,8 @@ export class AuthService {
         map((users) => {
           if (users.length > 0) {
             const user = users[0];
-            localStorage.setItem('authToken', user.token);
-            return user.token;
+            localStorage.setItem('authToken', user.id); // Stocker l'ID de l'utilisateur comme authToken
+            return user.id;
           } else {
             throw new Error('Invalid credentials');
           }
