@@ -1,12 +1,12 @@
-// header.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
   weatherData: any;
@@ -16,19 +16,24 @@ export class HeaderComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private authService: AuthService
   ) {
     this.searchForm = this.fb.group({
       cityName: [''],
-      timeOption: ['Daily']
+      timeOption: ['Daily'],
     });
 
-    this.searchForm.get('timeOption')?.valueChanges.subscribe(val => {
+    this.searchForm.get('timeOption')?.valueChanges.subscribe((val) => {
       this.value = val;
     });
   }
 
-  // onSubmit(): void {
-  //   const cityName = this.searchForm.get('cityName')?.value;
-  //   this.router.navigate(['/city', cityName]);
-  // }
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
