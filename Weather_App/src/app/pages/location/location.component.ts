@@ -2,7 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { JsonServerService } from 'src/app/services/jsonServer/user.service';
+import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 
