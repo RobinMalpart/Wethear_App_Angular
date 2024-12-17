@@ -12,6 +12,8 @@
     {{ errorMessage }}
   </div>
 
+  <button *ngIf="hasSearched" class="glassmorph rounded-full" (click)="addFavorite('1', locationId)">Add Fav</button>
+
   <app-daily-detailed-card
     *ngIf="hasSearched && currentWeatherType === 'daily' && !errorMessage" 
     [locationName]="locationName"

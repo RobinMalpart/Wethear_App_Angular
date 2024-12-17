@@ -22,7 +22,7 @@ export class WeatherService {
     return this.http.get(weatherUrl);
   }
 
-  getWeatherByCity(cityName: string): Observable<any> { // See if we can pipe it (optimization)
+  getWeatherByCity(cityName: string): Observable<any> {
     return new Observable(observer => {
       this.getCoordinates(cityName).subscribe(
         (data: any[]) => {
