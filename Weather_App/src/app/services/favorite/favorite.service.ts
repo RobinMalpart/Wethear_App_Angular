@@ -53,18 +53,34 @@ export class FavoriteService {
 
 
   removeFavorite(userId: string, locationId: string): Observable<any> {
-    console.log('FaroviteService removeFavorite');
+    console.log('FavoriteService removeFavorite');
     console.log('userId', userId);
     console.log('locationId', locationId);
     return new Observable(observer => {
-      this.http.delete(`http://localhost:3000/user_favorites/${userId}/${locationId}`).subscribe(
-        data => {
-          observer.next(data);
-          observer.complete();
-        },
-        error => observer.error(error)
-      );
-    }
-    );
-  }
+      // Adjust URL to match JSON Server's expected structure
+      this.http
+        .get('http://localhost:3000/user_favorites')
+        .subscribe((favorites: any) => {
+          const favorite = favorites.find(
+            (fav: any) =>
+              fav.user_id === userId && fav.location_id === locationId
+          );
+  
+          if (favorite && favorite.id) {
+            this.http
+              .delete(`http://localhost:3000/user_favorites/${favorite.id}`)
+              .subscribe(
+                (data) => {
+                  observer.next(data);
+                  observer.complete();
+                },
+                (error) => observer.error(error)
+              );
+          } else {
+            console.error('Favorite not found for deletion');
+            observer.error(new Error('Favorite not found'));
+          }
+        });
+    });
+  }  
 }

@@ -14,7 +14,13 @@
       "longitude": 7.6824892
     }
   ],
-  "user_favorites": [],
+  "user_favorites": [
+    {
+      "id": "6ed0",
+      "user_id": "1",
+      "location_id": "1dcb60fd-c9ee-47d0-a305-94f6050f1161"
+    }
+  ],
   "user_history": [
     {
       "id": "93010703-9551-4eab-a4cb-894345cdbeb9",
@@ -27,6 +33,12 @@
       "user_id": "1",
       "location_id": "1dcb60fd-c9ee-47d0-a305-94f6050f1161",
       "consulted_at": "2024-12-20T11:24:34.259Z"
+    },
+    {
+      "id": "06076336-8ab5-4676-8d72-b5aa29c0f619",
+      "user_id": "1",
+      "location_id": "1dcb60fd-c9ee-47d0-a305-94f6050f1161",
+      "consulted_at": "2024-12-20T12:06:14.330Z"
     }
   ]
 }

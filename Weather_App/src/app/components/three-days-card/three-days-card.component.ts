@@ -34,9 +34,5 @@ export class ThreeDaysCardComponent {
     this.firstDayWeather = this.threeDaysWeather.slice(0, 8);
     this.secondDayWeather = this.threeDaysWeather.slice(8, 16);
     this.thirdDayWeather = this.threeDaysWeather.slice(16, 24);
-
-    console.log('First Day Weather:', this.firstDayWeather);
-    console.log('Second Day Weather:', this.secondDayWeather);
-    console.log('Third Day Weather:', this.thirdDayWeather);
   }
 }
