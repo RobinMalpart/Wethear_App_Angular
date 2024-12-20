@@ -164,23 +164,30 @@ export class LocationComponent implements OnInit, OnDestroy {
       next: (fiveDaysWeatherData) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
+  
         this.threeDaysWeather = fiveDaysWeatherData.list
-          .filter((data: any) => new Date(data.dt * 1000) > today)
+          .filter((data: any) => {
+            const dataDate = new Date(data.dt * 1000);
+            dataDate.setHours(0, 0, 0, 0);
+            return dataDate > today; // Filter out today's data
+          })
           .slice(0, 24)
-          .map(this.mapWeatherData);
-
+          .map((data: any) => this.mapWeatherData(data));
+  
         this.hasSearched = true;
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error fetching 5 days weather data:', err);
-        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
+        this.sharedService.setErrorMessage(
+          'Error fetching weather forecast data.'
+        );
         this.hasSearched = false;
         this.isLoading = false;
       },
     });
   }
+  
 
   mapWeatherData(data: any): any {
     const iconCode = data.weather[0].icon;
