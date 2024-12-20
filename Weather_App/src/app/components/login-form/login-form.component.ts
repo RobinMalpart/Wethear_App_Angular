@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -35,7 +35,7 @@ export class LoginFormComponent implements OnInit {
           this.snackBar.open('Login successful!', 'Close', {
             duration: 5000,
           });
-          this.router.navigate(['/protected']);
+          this.router.navigate(['/home']);
         },
         (error) => {
           console.error('Login failed:', error);
