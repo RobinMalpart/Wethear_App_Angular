@@ -3,6 +3,7 @@ export interface CityWeather {
     weather: string;
     temperature: number;
     feelsLike: number;
+    icon: string;
   }
 export interface Location {
   id: string;

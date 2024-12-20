@@ -1,12 +1,13 @@
-<h2>Favorite</h2>
+<h2>Top French cities</h2>
 <hr class="my-2" />
-<div class="grid grid-cols-6 gap-4 mb-5">
+<div class="grid grid-cols-6 gap-4 mb-5 pt-3">
   <app-card
-    *ngFor="let item of favoriteCity"
+    *ngFor="let item of topFrenchCity"
     [city]="item.city"
     [weather]="item.weather"
     [temperature]="item.temperature"
     [feelsLike]="item.feelsLike"
+    [icon]="item.icon"
   >
   </app-card>
 </div>
@@ -14,31 +15,45 @@
 <h2>Last searched cities</h2>
 <hr class="my-2" />
 <div *ngIf="isNotUserConnected">
-  <p class="text-sm italic text-gray-500"> Please login or sign up if you want to see this section</p>
+  <div *ngIf="isFavoritesEmpty" class="text-gray-500 italic text-center py-5">
+    Please login or sign up if you want to see this section
+  </div>
 </div>
 <div *ngIf="isUserHistoryEmpty">
-  <p class="text-sm italic text-gray-500"> Please search some locations to fill this section</p>
+  <div *ngIf="isFavoritesEmpty" class="text-gray-500 italic text-center py-5">
+    Please search some locations to fill this section
+  </div>
 </div>
-<div class="grid grid-cols-6 gap-4 mb-5">
+<div *ngIf="!isUserHistoryEmpty && !isNotUserConnected" class="grid grid-cols-6 gap-4 mb-5 pt-3">
   <app-card
     *ngFor="let item of lastSeenCity"
     [city]="item.city"
     [weather]="item.weather"
     [temperature]="item.temperature"
     [feelsLike]="item.feelsLike"
+    [icon]="item.icon"
   >
   </app-card>
 </div>
 
-<h2>Top French Cities</h2>
+<h2>Favorite Cities</h2>
 <hr class="my-2" />
-<div class="grid grid-cols-6 gap-4 mb-5">
+<div *ngIf="isNotUserConnected">
+  <div *ngIf="isFavoritesEmpty" class="text-gray-500 italic text-center py-5">
+    Please login or sign up if you want to see this section
+  </div>
+</div>
+<div *ngIf="isFavoritesEmpty" class="text-gray-500 italic text-center py-5">
+  Please add some locations to your favorites to fill this section.
+</div>
+<div *ngIf="!isFavoritesEmpty && !isNotUserConnected" class="grid grid-cols-6 gap-4 mb-5 pt-3">
   <app-card
-    *ngFor="let item of topFrenchCity"
+    *ngFor="let item of favoriteCity"
     [city]="item.city"
     [weather]="item.weather"
     [temperature]="item.temperature"
     [feelsLike]="item.feelsLike"
+    [icon]="item.icon"
   >
   </app-card>
 </div>

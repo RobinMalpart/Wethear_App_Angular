@@ -1,4 +1,3 @@
-// src/app/components/location/location.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -13,7 +12,6 @@ import { FavoriteService } from 'src/app/services/favorite/favorite.service';
   styleUrls: ['./location.component.css'],
 })
 export class LocationComponent implements OnInit, OnDestroy {
-  // Weather Data Properties
   locationName = '';
   mainTemperature = 0;
   weatherDescription = '';
@@ -28,20 +26,20 @@ export class LocationComponent implements OnInit, OnDestroy {
   errorMessage = '';
   date: Date = new Date();
 
-  hasSearched: boolean = false;
-  isLoading: boolean = false;
+  hasSearched = false;
+  isLoading = false;
 
-  currentWeatherIconUrl: string = '';
+  currentWeatherIconUrl = '';
 
   oneDayWeather: any[] = [];
   threeDaysWeather: any[] = [];
 
-  currentWeatherType: string = 'daily';
-  unit: string = 'C';
+  currentWeatherType = 'daily';
+  unit = 'C';
 
-  locationId: string = '';
-  isFavorite: boolean = true;
-  userId: string = '1';
+  locationId = '';
+  isFavorite = false;
+  userId = '1';
 
   private errorSubscription!: Subscription;
 
@@ -54,14 +52,12 @@ export class LocationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to error messages from SharedService
     this.errorSubscription = this.sharedService.errorMessage$.subscribe(
       (message) => {
         this.errorMessage = message ?? '';
       }
     );
 
-    // Subscribe to query parameters
     this.route.queryParams.subscribe((params) => {
       const city = params['city']?.trim();
       this.unit = params['unit'] === 'F' ? 'F' : 'C';
@@ -82,105 +78,60 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   searchWeather(city: string, timeOption: string): void {
-    // Reset weather data and error message
-    this.oneDayWeather = [];
-    this.threeDaysWeather = [];
-    this.hasSearched = false;
-    this.sharedService.setErrorMessage('');
+    this.resetWeatherData();
 
-    if (city.length > 0 && timeOption === 'daily') {
+    if (city.length > 0) {
       this.weatherService.getCoordinates(city).subscribe({
         next: (data) => {
           if (data && data.length > 0) {
             const { lat, lon } = data[0];
-            this.getTodayWeatherData(lat, lon);
-
-            // Subscribe to addLocationAndSearch Observable
-            // change with userId
-            this.jsonServerService
-              .addLocationAndSearch('1', city, lat, lon)
-              .subscribe({  
-                next: (result) => {
-                  console.log('Location and Search added:', result);
-                  this.locationId = result.ville.id
-                  // Optionally, display a success message to the user
-                  // Check if the location is a favorite
-                  this.getCheckFavorite(this.userId, this.locationId);
-                  console.log('isFavorite', this.isFavorite);
-                },
-                error: (error) => {
-                  console.error('Error adding Location and Search:', error);
-                  this.sharedService.setErrorMessage(
-                    'Failed to record your search.'
-                  );
-                },
-              });
+            if (timeOption === 'daily') {
+              this.getTodayWeatherData(lat, lon);
+            } else {
+              this.getThreeDaysWeatherData(lat, lon);
+            }
+            this.recordLocationAndCheckFavorite(city, lat, lon);
           } else {
-            this.sharedService.setErrorMessage(
-              'City not found. Please try again.'
-            );
+            this.sharedService.setErrorMessage('City not found. Please try again.');
             this.hasSearched = false;
           }
         },
         error: () => {
-          this.sharedService.setErrorMessage(
-            'Error fetching data. Please try again.'
-          );
-          this.hasSearched = false;
-        },
-      });
-    } else if (city.length > 0 && timeOption === 'next-3-days') {
-      this.weatherService.getCoordinates(city).subscribe({
-        next: (data) => {
-          if (data && data.length > 0) {
-            const { lat, lon } = data[0];
-            this.getThreeDaysWeatherData(lat, lon);
-            // Subscribe to addLocationAndSearch Observable
-            // change with userId
-            this.jsonServerService
-              .addLocationAndSearch('1', city, lat, lon)
-              .subscribe({
-                next: (result) => {
-                  console.log('Location and Search added:', result);
-                  // Optionally, display a success message to the user
-                },
-                error: (error) => {
-                  console.error('Error adding Location and Search:', error);
-                  this.sharedService.setErrorMessage(
-                    'Failed to record your search.'
-                  );
-                },
-              });
-          } else {
-            this.sharedService.setErrorMessage(
-              'City not found. Please try again.'
-            );
-            this.hasSearched = false;
-          }
-        },
-        error: (err) => {
-          this.sharedService.setErrorMessage(
-            'Error fetching data. Please try again.'
-          );
+          this.sharedService.setErrorMessage('Error fetching data. Please try again.');
           this.hasSearched = false;
         },
       });
     } else {
-      if (city.length === 0) {
-        this.sharedService.setErrorMessage('Please enter a valid city name.');
-      } else {
-        this.sharedService.setErrorMessage(
-          'Selected weather type is not supported.'
-        );
-      }
+      this.sharedService.setErrorMessage('Please enter a valid city name.');
     }
+  }
+
+  resetWeatherData(): void {
+    this.oneDayWeather = [];
+    this.threeDaysWeather = [];
+    this.hasSearched = false;
+    this.sharedService.setErrorMessage('');
+  }
+
+  recordLocationAndCheckFavorite(city: string, lat: number, lon: number): void {
+    this.jsonServerService.addLocationAndSearch(this.userId, city, lat, lon).subscribe({
+      next: (result) => {
+        this.locationId = result?.ville?.id ?? '';
+        if (this.locationId) {
+          this.getCheckFavorite(this.userId, this.locationId);
+        }
+      },
+      error: (error) => {
+        console.error('Error adding Location and Search:', error);
+        this.sharedService.setErrorMessage('Failed to record your search.');
+      },
+    });
   }
 
   getTodayWeatherData(lat: number, lon: number): void {
     this.isLoading = true;
     this.weatherService.getWeather(lat, lon).subscribe({
       next: (weatherData) => {
-        console.log('Current Weather Data:', weatherData);
         this.storeWeatherData(weatherData);
       },
       error: (err) => {
@@ -190,28 +141,17 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
     });
+
     this.weatherService.get5DaysWeather(lat, lon).subscribe({
       next: (fiveDaysWeatherData) => {
-        console.log('5 Days Weather Data:', fiveDaysWeatherData);
         fiveDaysWeatherData.list.splice(0, 8).forEach((data: any) => {
-          const iconCode = data.weather[0].icon;
-          const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-
-          this.oneDayWeather.push({
-            day: new Date(data.dt * 1000),
-            time: this.formatUnixTimestamp(data.dt),
-            temperature: data.main.temp,
-            weather: data.weather[0].description,
-            iconUrl: iconUrl,
-          });
+          this.oneDayWeather.push(this.mapWeatherData(data));
         });
         this.hasSearched = true;
         this.isLoading = false;
       },
       error: (err) => {
-        this.sharedService.setErrorMessage(
-          'Error fetching weather forecast data.'
-        );
+        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
         this.hasSearched = false;
         this.isLoading = false;
       },
@@ -220,50 +160,60 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   getThreeDaysWeatherData(lat: number, lon: number): void {
     this.isLoading = true;
+  
+    this.weatherService.getWeather(lat, lon).subscribe({
+      next: (weatherData) => {
+        this.storeWeatherData(weatherData);
+      },
+      error: (err) => {
+        console.error('Error fetching current weather data:', err);
+        this.sharedService.setErrorMessage('Error fetching current weather data.');
+        this.isLoading = false;
+      },
+    });
+  
     this.weatherService.get5DaysWeather(lat, lon).subscribe({
       next: (fiveDaysWeatherData) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
-        // Extracting data for the next 3 days (assuming 8 entries per day)
+  
         this.threeDaysWeather = fiveDaysWeatherData.list
           .filter((data: any) => {
             const dataDate = new Date(data.dt * 1000);
             dataDate.setHours(0, 0, 0, 0);
             return dataDate > today; // Filter out today's data
           })
-          .slice(0, 24) // Get the first 24 entries (3 days)
-          .map((data: any) => {
-            const iconCode = data.weather[0].icon;
-            const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-
-            return {
-              day: new Date(data.dt * 1000),
-              time: this.formatUnixTimestamp(data.dt),
-              temperature: data.main.temp,
-              weather: data.weather[0].description,
-              iconUrl: iconUrl,
-            };
-          });
+          .slice(0, 24)
+          .map((data: any) => this.mapWeatherData(data));
+  
         this.hasSearched = true;
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error fetching 5 days weather data:', err);
-        this.sharedService.setErrorMessage(
-          'Error fetching weather forecast data.'
-        );
-        this.hasSearched = false;
+        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
         this.isLoading = false;
       },
     });
+  }  
+  
+
+  mapWeatherData(data: any): any {
+    const iconCode = data.weather[0].icon;
+    return {
+      day: new Date(data.dt * 1000),
+      time: this.formatUnixTimestamp(data.dt),
+      temperature: data.main.temp,
+      weather: data.weather[0].description,
+      iconUrl: `https://openweathermap.org/img/wn/${iconCode}@2x.png`,
+    };
   }
 
   addFavorite(userId: string, locationId: string): void {
     if (this.isFavorite) {
+      console.log('Removing favorite...');
       this.favoriteService.removeFavorite(userId, locationId).subscribe({
         next: () => {
-          console.log('Favorite removed');
+          console.log('Favorite successfully removed:', { userId, locationId });
           this.isFavorite = false;
         },
         error: (error) => {
@@ -271,9 +221,10 @@ export class LocationComponent implements OnInit, OnDestroy {
         },
       });
     } else {
+      console.log('Adding favorite...');
       this.favoriteService.addFavorite(userId, locationId).subscribe({
         next: () => {
-          console.log('Favorite added');
+          console.log('Favorite successfully added:', { userId, locationId });
           this.isFavorite = true;
         },
         error: (error) => {
@@ -286,14 +237,9 @@ export class LocationComponent implements OnInit, OnDestroy {
   getCheckFavorite(userId: string, locationId: string): void {
     console.log('getCheckFavorite', userId, locationId);
     this.favoriteService.getFavoritesByUserId(userId).subscribe({
-      next: (favorites: any) => {
-        console.log('favorites getcheck', favorites);
-        favorites.forEach((favorite: any) => {
-          if (favorite.location_id === locationId) {
-            this.isFavorite = true;
-          }
-        console.log('isFavorite', this.isFavorite);
-        });
+      next: (favorites) => {
+        this.isFavorite = favorites.some((favorite: any) => favorite.location_id === locationId);
+        console.log('isFavorite:', this.isFavorite);
       },
       error: (error) => {
         console.error('Error fetching favorites:', error);
@@ -313,7 +259,6 @@ export class LocationComponent implements OnInit, OnDestroy {
     this.minTemperature = weatherData.main.temp_min;
     this.maxTemperature = weatherData.main.temp_max;
 
-    // Extract the icon code and construct the icon URL
     const iconCode = weatherData.weather[0].icon;
     this.currentWeatherIconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
   }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-daily-detailed-card',
@@ -19,9 +19,16 @@ export class DailyDetailedCardComponent {
   @Input() rain: number = 0;
   @Input() minTemperature: number = 0;
   @Input() maxTemperature: number = 0;
-  
-
   @Input() oneDayWeather: any[] = [];
-
   @Input() unit: string = 'C';
+
+  @Input() isFavorite: boolean = false;
+  @Input() userId: string = '';
+  @Input() locationId: string = '';
+
+  @Output() toggleFavorite = new EventEmitter<{ userId: string; locationId: string }>();
+
+  onToggleFavorite(): void {
+    this.toggleFavorite.emit({ userId: this.userId, locationId: this.locationId });
+  }
 }

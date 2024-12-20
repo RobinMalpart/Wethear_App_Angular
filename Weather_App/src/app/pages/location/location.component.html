@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center bg-transparent-100 p-40 overflow-auto">
+<div class="flex flex-col items-center bg-transparent-100 p-5 overflow-auto mb-10 mt-10">
   <!-- Loader -->
   <div *ngIf="isLoading" class="flex justify-center items-center mb-4">
     <svg class="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -12,38 +12,40 @@
     {{ errorMessage }}
   </div>
 
-  <button *ngIf="hasSearched" class="glassmorph rounded-full mb-10" (click)="addFavorite(userId, locationId)">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 fill-current" [ngClass]="isFavorite ? 'fill-red-500' : 'fill-white'" viewBox="0 -960 960 960">
-      <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/>
-    </svg>
-  </button>
-
   <app-daily-detailed-card
-    *ngIf="hasSearched && currentWeatherType === 'daily' && !errorMessage" 
-    [locationName]="locationName"
-    [currentDate]="date"
-    [mainTemperature]="mainTemperature"
-    [weatherDescription]="weatherDescription"
-    [currentWeatherIconUrl]="currentWeatherIconUrl"
-    [oneDayWeather]="oneDayWeather"
-    [feelsLikeTemperature]="feelsLikeTemperature"
-    [weatherCondition]="weatherCondition"
-    [windSpeed]="windSpeed"
-    [humidity]="humidity"
-    [cloudCoverage]="cloudCoverage"
-    [minTemperature]="minTemperature"
-    [maxTemperature]="maxTemperature"
-    [unit]="unit"
-  ></app-daily-detailed-card>
+  *ngIf="hasSearched && currentWeatherType === 'daily' && !errorMessage"
+  [locationName]="locationName"
+  [currentDate]="date"
+  [mainTemperature]="mainTemperature"
+  [weatherDescription]="weatherDescription"
+  [currentWeatherIconUrl]="currentWeatherIconUrl"
+  [oneDayWeather]="oneDayWeather"
+  [feelsLikeTemperature]="feelsLikeTemperature"
+  [weatherCondition]="weatherCondition"
+  [windSpeed]="windSpeed"
+  [humidity]="humidity"
+  [cloudCoverage]="cloudCoverage"
+  [minTemperature]="minTemperature"
+  [maxTemperature]="maxTemperature"
+  [unit]="unit"
+  [isFavorite]="isFavorite"
+  [userId]="userId"
+  [locationId]="locationId"
+  (toggleFavorite)="addFavorite($event.userId, $event.locationId)"
+></app-daily-detailed-card>
 
-  <app-three-days-card
-    *ngIf="hasSearched && currentWeatherType === 'next-3-days' && !errorMessage"
-    [locationName]="locationName"
-    [currentDate]="date"
-    [mainTemperature]="mainTemperature"
-    [weatherDescription]="weatherDescription"
-    [currentWeatherIconUrl]="currentWeatherIconUrl"
-    [threeDaysWeather]="threeDaysWeather"
-    [unit]="unit"
-  ></app-three-days-card>
+<app-three-days-card
+  *ngIf="hasSearched && currentWeatherType === 'next-3-days' && !errorMessage"
+  [locationName]="locationName"
+  [currentDate]="date"
+  [mainTemperature]="mainTemperature"
+  [weatherDescription]="weatherDescription"
+  [currentWeatherIconUrl]="currentWeatherIconUrl"
+  [threeDaysWeather]="threeDaysWeather"
+  [unit]="unit"
+  [isFavorite]="isFavorite"
+  [userId]="userId"
+  [locationId]="locationId"
+  (toggleFavorite)="addFavorite($event.userId, $event.locationId)"
+></app-three-days-card>
 </div>
