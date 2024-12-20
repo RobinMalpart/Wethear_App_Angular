@@ -7,7 +7,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { Location, UserHistory } from 'src/app/models/city';
+import { Location, UserHistory } from 'src/app/models/weather';
 
 @Injectable({
   providedIn: 'root',
@@ -48,11 +48,11 @@ export class JsonServerService {
         switchMap((locations: Location[]) => {
           const existingLocation = locations.find(
             (loc) =>
-              loc.name === villeName &&
-              loc.coordinateX === coordinateX &&
-              loc.coordinateY === coordinateY
+              loc.city_name === villeName &&
+              loc.latitude === coordinateX &&
+              loc.longitude === coordinateY
           );
-  
+
           if (existingLocation) {
             const newSearch: any = {
               id: uuidv4(),
@@ -64,7 +64,10 @@ export class JsonServerService {
               switchMap((createdSearch: UserHistory) => {
                 return new Observable<{ ville: Location; search: UserHistory }>(
                   (observer) => {
-                    observer.next({ ville: existingLocation, search: createdSearch });
+                    observer.next({
+                      ville: existingLocation,
+                      search: createdSearch,
+                    });
                     observer.complete();
                   }
                 );
@@ -77,7 +80,7 @@ export class JsonServerService {
               latitude: coordinateX,
               longitude: coordinateY,
             };
-  
+
             return this.addLocation(newVille).pipe(
               switchMap((createdVille: Location) => {
                 const newSearch: any = {
@@ -88,12 +91,16 @@ export class JsonServerService {
                 };
                 return this.addSearch(newSearch).pipe(
                   switchMap((createdSearch: UserHistory) => {
-                    return new Observable<{ ville: Location; search: UserHistory }>(
-                      (observer) => {
-                        observer.next({ ville: createdVille, search: createdSearch });
-                        observer.complete();
-                      }
-                    );
+                    return new Observable<{
+                      ville: Location;
+                      search: UserHistory;
+                    }>((observer) => {
+                      observer.next({
+                        ville: createdVille,
+                        search: createdSearch,
+                      });
+                      observer.complete();
+                    });
                   })
                 );
               })
@@ -103,7 +110,6 @@ export class JsonServerService {
         catchError(this.handleError)
       );
   }
-  
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
@@ -116,5 +122,17 @@ export class JsonServerService {
     }
     console.error(errorMessage);
     return throwError(errorMessage);
+  }
+
+  getUserHistoryByUserId(userId: string): Observable<UserHistory[]> {
+    const url = `${this.userHistoryApiUrl}?user_id=${userId}`;
+    return this.http
+      .get<UserHistory[]>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  getLocationById(locationId: string): Observable<Location> {
+    const url = `${this.locationApiUrl}/${locationId}`;
+    return this.http.get<Location>(url, this.httpOptions);
   }
 }
