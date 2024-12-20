@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 
 @Component({
@@ -16,7 +17,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -60,5 +62,10 @@ export class HeaderComponent implements OnInit {
     this.value = option;
     this.searchForm.get('timeOption')?.setValue(option);
     this.onSubmit();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']); 
   }
 }
