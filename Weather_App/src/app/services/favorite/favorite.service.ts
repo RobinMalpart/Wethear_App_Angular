@@ -33,4 +33,38 @@ export class FavoriteService {
       );
     });
   }
+
+  getFavoritesByUserId(userId: string): Observable<any[]> {
+    return new Observable(observer => {
+      this.getFavorites().subscribe(
+        (favorites: any) => {
+          console.log('favorites', favorites);
+          const filteredFavorites = favorites.filter((favorite: any) => favorite.user_id === userId);
+          observer.next(filteredFavorites);
+          observer.complete();
+        },
+        error => {
+          console.error('Error in getFavoritesByUserId:', error);
+          observer.error(error);
+        }
+      );
+    });
+  }
+
+
+  removeFavorite(userId: string, locationId: string): Observable<any> {
+    console.log('FaroviteService removeFavorite');
+    console.log('userId', userId);
+    console.log('locationId', locationId);
+    return new Observable(observer => {
+      this.http.delete(`http://localhost:3000/user_favorites/${userId}/${locationId}`).subscribe(
+        data => {
+          observer.next(data);
+          observer.complete();
+        },
+        error => observer.error(error)
+      );
+    }
+    );
+  }
 }

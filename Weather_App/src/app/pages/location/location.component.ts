@@ -40,6 +40,8 @@ export class LocationComponent implements OnInit, OnDestroy {
   unit: string = 'C';
 
   locationId: string = '';
+  isFavorite: boolean = true;
+  userId: string = '1';
 
   private errorSubscription!: Subscription;
 
@@ -102,6 +104,9 @@ export class LocationComponent implements OnInit, OnDestroy {
                   console.log('Location and Search added:', result);
                   this.locationId = result.ville.id
                   // Optionally, display a success message to the user
+                  // Check if the location is a favorite
+                  this.getCheckFavorite(this.userId, this.locationId);
+                  console.log('isFavorite', this.isFavorite);
                 },
                 error: (error) => {
                   console.error('Error adding Location and Search:', error);
@@ -255,14 +260,43 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   addFavorite(userId: string, locationId: string): void {
-    this.favoriteService.addFavorite(userId, locationId).subscribe({
-      next: (data) => {
-        console.log('Favorite added:', data);
-        // Optionally, display a success message to the user
+    if (this.isFavorite) {
+      this.favoriteService.removeFavorite(userId, locationId).subscribe({
+        next: () => {
+          console.log('Favorite removed');
+          this.isFavorite = false;
+        },
+        error: (error) => {
+          console.error('Error removing favorite:', error);
+        },
+      });
+    } else {
+      this.favoriteService.addFavorite(userId, locationId).subscribe({
+        next: () => {
+          console.log('Favorite added');
+          this.isFavorite = true;
+        },
+        error: (error) => {
+          console.error('Error adding favorite:', error);
+        },
+      });
+    }
+  }
+
+  getCheckFavorite(userId: string, locationId: string): void {
+    console.log('getCheckFavorite', userId, locationId);
+    this.favoriteService.getFavoritesByUserId(userId).subscribe({
+      next: (favorites: any) => {
+        console.log('favorites getcheck', favorites);
+        favorites.forEach((favorite: any) => {
+          if (favorite.location_id === locationId) {
+            this.isFavorite = true;
+          }
+        console.log('isFavorite', this.isFavorite);
+        });
       },
       error: (error) => {
-        console.error('Error adding favorite:', error);
-        this.sharedService.setErrorMessage('Failed to add favorite.');
+        console.error('Error fetching favorites:', error);
       },
     });
   }
