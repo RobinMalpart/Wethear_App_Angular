@@ -160,6 +160,18 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   getThreeDaysWeatherData(lat: number, lon: number): void {
     this.isLoading = true;
+  
+    this.weatherService.getWeather(lat, lon).subscribe({
+      next: (weatherData) => {
+        this.storeWeatherData(weatherData);
+      },
+      error: (err) => {
+        console.error('Error fetching current weather data:', err);
+        this.sharedService.setErrorMessage('Error fetching current weather data.');
+        this.isLoading = false;
+      },
+    });
+  
     this.weatherService.get5DaysWeather(lat, lon).subscribe({
       next: (fiveDaysWeatherData) => {
         const today = new Date();
@@ -178,15 +190,11 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error fetching 5 days weather data:', err);
-        this.sharedService.setErrorMessage(
-          'Error fetching weather forecast data.'
-        );
-        this.hasSearched = false;
+        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
         this.isLoading = false;
       },
     });
-  }
+  }  
   
 
   mapWeatherData(data: any): any {

@@ -1,5 +1,5 @@
 <div
-  class="card glassmorph p-6 rounded-2xl shadow-lg transition-transform transform hover:scale-105 bg-white dark:bg-gray-800"
+  class="card glassmorph glassBorder p-6 rounded-2xl shadow-lg bg-white dark:bg-gray-800"
 >
   <!-- Weather Summary Section -->
   <div class="flex flex-col md:flex-row items-center md:items-start md:space-x-6">
@@ -87,7 +87,7 @@
     <div class="flex space-x-4">
       <div
         *ngFor="let weather of oneDayWeather"
-        class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+        class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
       >
         <p class="text-sm text-gray-500 dark:text-gray-300">
           {{ weather.day | date:'EEEE, MMMM d':'':'en-US' }}
