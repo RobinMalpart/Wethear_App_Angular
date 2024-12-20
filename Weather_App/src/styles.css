@@ -1,1 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Body style*/
+html {
+    @apply h-full;
+    }
+
+    body {
+        @apply bg-gradient-to-br from-[#85CEF9] to-[#57B8F2] text-white h-full antialiased;
+        font-family: 'Prompt', sans-serif;
+        font-weight: 300;
+        letter-spacing: -0.04rem;
+    }
+/* Header styles */
+
+.btnGlassHeader {
+    @apply glassmorph font-bold py-2 px-4 rounded-b-md border-x border-b border-t-0 border-white/75 h-fit;
+    }
+
+.glassBorderHeader {
+    @apply rounded-b-md border-x border-b border-t-0 border-white/75;
+    }
+
+/* General styles */
+
+.glassmorph {
+    @apply bg-white text-white bg-opacity-20 backdrop-filter backdrop-blur-xl;
+    }
+
+.glassBorder {
+    @apply border border-white/75;
+    }
+
+.btnGlass {
+    @apply glassmorph glassBorder font-bold py-2 px-4 rounded-b-md;
+    }
+
+button {
+    @apply transition-all duration-300 ease-in-out;
+    }
+
+button:hover {
+    @apply bg-gray-950/20;
+    }

@@ -1,36 +1,6 @@
 {
-    "users": [
-      {
-        "id": "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
-        "username": "johndoe",
-        "email": "john@example.com",
-        "password": "hashedpassword123",
-        "created_at": "2023-01-01T00:00:00Z"
-      }
-    ],
-    "locations": [
-      {
-        "id": "2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
-        "city_name": "Paris",
-        "country": "France",
-        "latitude": 48.8566,
-        "longitude": 2.3522
-      }
-    ],
-    "user_favorites": [
-      {
-        "id": "3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r",
-        "user_id": "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
-        "location_id": "2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
-        "created_at": "2023-01-01T00:00:00Z"
-      }
-    ],
-    "user_history": [
-      {
-        "id": "4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s",
-        "user_id": "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
-        "location_id": "2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
-        "consulted_at": "2023-01-01T00:00:00Z"
-      }
-    ]
-  }
+  "users": [],
+  "locations": [],
+  "user_favorites": [],
+  "user_history": []
+}
