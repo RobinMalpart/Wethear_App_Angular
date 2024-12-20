@@ -2,36 +2,52 @@
   class="card glassmorph glassBorder p-6 rounded-2xl shadow-lg bg-white dark:bg-gray-800"
 >
   <!-- Weather Summary Section -->
-  <div class="flex flex-col md:flex-row items-center md:items-start md:space-x-6">
-    <div class="text-center md:text-left mb-4 md:mb-0">
+  <div class="flex flex-col md:flex-row items-start justify-between w-full">
+    <!-- Left Section: Location Info -->
+    <div class="flex flex-col text-center md:text-left mb-4 md:mb-0">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
         {{ locationName }}
       </h2>
       <span class="text-sm text-gray-500 dark:text-gray-300">
-        {{ currentDate | date: 'fullDate':'':'en-US' }}
+        {{ currentDate | date : "fullDate" : "" : "en-US" }}
       </span>
     </div>
-    <div class="flex items-center space-x-4">
+
+    <div class="flex items-center space-x-4 text-center">
       <img
         [src]="currentWeatherIconUrl"
         [alt]="weatherDescription"
         class="w-24 h-24"
         loading="lazy"
       />
-      <div class="text-center">
+      <div>
         <p class="text-xl text-gray-700 dark:text-gray-200">
-          {{ mainTemperature | tempConverter: unit }}°{{ unit }}
+          {{ mainTemperature | tempConverter : unit }}°{{ unit }}
         </p>
         <p class="text-sm text-gray-500 dark:text-gray-400">
           {{ weatherDescription }}
         </p>
       </div>
-      <button class="glassmorph rounded-full" (click)="onToggleFavorite()">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 fill-current" [ngClass]="isFavorite ? 'fill-red-500' : 'fill-white'" viewBox="0 -960 960 960">
-          <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/>
-        </svg>
-      </button>
+      <app-thermometer
+        [temperature]="mainTemperature | tempConverter : unit"
+      ></app-thermometer>
     </div>
+
+    <button
+      class="glassmorph rounded-full self-end md:self-center"
+      (click)="onToggleFavorite()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-12 w-12 fill-current"
+        [ngClass]="isFavorite ? 'fill-red-500' : 'fill-white'"
+        viewBox="0 -960 960 960"
+      >
+        <path
+          d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"
+        />
+      </svg>
+    </button>
   </div>
 
   <hr class="my-6 border-gray-300 dark:border-gray-600" />
@@ -41,76 +57,91 @@
   </h3>
   <div class="overflow-x-auto">
     <div class="flex space-x-4">
-    <div class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32">
-      <p class="text-sm text-gray-500 dark:text-gray-300">Feels Like</p>
-      <p class="text-lg font-semibold text-gray-800 dark:text-white">
-        {{ feelsLikeTemperature | tempConverter: unit }}°{{ unit }}
-      </p>
-    </div>
-    <div class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32">
-      <p class="text-sm text-gray-500 dark:text-gray-300">Wind</p>
-      <p class="text-lg font-semibold text-gray-800 dark:text-white">
-        {{ windSpeed || 0 }} m/s
-      </p>
-    </div>
-    <div class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32">
-      <p class="text-sm text-gray-500 dark:text-gray-300">Humidity</p>
-      <p class="text-lg font-semibold text-gray-800 dark:text-white">
-        {{ humidity || 0 }}%
-      </p>
-    </div>
-    <div class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32">
-      <p class="text-sm text-gray-500 dark:text-gray-300">Clouds</p>
-      <p class="text-lg font-semibold text-gray-800 dark:text-white">
-        {{ cloudCoverage || 0 }}%
-      </p>
-    </div>
-    <div class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32">
-      <p class="text-sm text-gray-500 dark:text-gray-300">Rain</p>
-      <p class="text-lg font-semibold text-gray-800 dark:text-white">
-        {{ rain || 0 }} mm
-      </p>
-    </div>
-    <div class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32">
-      <p class="text-sm text-gray-500 dark:text-gray-300">Min Temp</p>
-      <p class="text-lg font-semibold text-gray-800 dark:text-white">
-        {{ minTemperature  | tempConverter: unit }}°{{ unit }}
-      </p>
-    </div>
-    <div class="flex-shrink-0 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32">
-      <p class="text-sm text-gray-500 dark:text-gray-300">Max Temp</p>
-      <p class="text-lg font-semibold text-gray-800 dark:text-white">
-        {{ maxTemperature  | tempConverter: unit }}°{{ unit }}
-      </p>
-    </div>
-  </div>
-
-  <h3 class="text-xl font-semibold text-gray-800 dark:text-white mt-6 mb-4">
-    Next 24 Hours
-  </h3>
-  <div class="overflow-x-auto">
-    <div class="flex space-x-4">
       <div
-        *ngFor="let weather of oneDayWeather"
         class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
       >
-        <p class="text-sm text-gray-500 dark:text-gray-300">
-          {{ weather.day | date:'EEEE, MMMM d':'':'en-US' }}
-        </p>
-
-        <img
-          [src]="weather.iconUrl"
-          [alt]="weather.weather"
-          class="w-12 h-12 my-2"
-          loading="lazy"
-        />
-
+        <p class="text-sm text-gray-500 dark:text-gray-300">Feels Like</p>
         <p class="text-lg font-semibold text-gray-800 dark:text-white">
-          {{ weather.temperature | tempConverter: unit }}°{{ unit }}
+          {{ feelsLikeTemperature | tempConverter : unit }}°{{ unit }}
         </p>
-        <p class="text-xs text-gray-500 dark:text-gray-300">
-          {{ weather.time }}
+      </div>
+      <div
+        class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+      >
+        <p class="text-sm text-gray-500 dark:text-gray-300">Wind</p>
+        <p class="text-lg font-semibold text-gray-800 dark:text-white">
+          {{ windSpeed || 0 }} m/s
         </p>
+      </div>
+      <div
+        class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+      >
+        <p class="text-sm text-gray-500 dark:text-gray-300">Humidity</p>
+        <p class="text-lg font-semibold text-gray-800 dark:text-white">
+          {{ humidity || 0 }}%
+        </p>
+      </div>
+      <div
+        class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+      >
+        <p class="text-sm text-gray-500 dark:text-gray-300">Clouds</p>
+        <p class="text-lg font-semibold text-gray-800 dark:text-white">
+          {{ cloudCoverage || 0 }}%
+        </p>
+      </div>
+      <div
+        class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+      >
+        <p class="text-sm text-gray-500 dark:text-gray-300">Rain</p>
+        <p class="text-lg font-semibold text-gray-800 dark:text-white">
+          {{ rain || 0 }} mm
+        </p>
+      </div>
+      <div
+        class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+      >
+        <p class="text-sm text-gray-500 dark:text-gray-300">Min Temp</p>
+        <p class="text-lg font-semibold text-gray-800 dark:text-white">
+          {{ minTemperature | tempConverter : unit }}°{{ unit }}
+        </p>
+      </div>
+      <div
+        class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+      >
+        <p class="text-sm text-gray-500 dark:text-gray-300">Max Temp</p>
+        <p class="text-lg font-semibold text-gray-800 dark:text-white">
+          {{ maxTemperature | tempConverter : unit }}°{{ unit }}
+        </p>
+      </div>
+    </div>
+
+    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mt-6 mb-4">
+      Next 24 Hours
+    </h3>
+    <div class="overflow-x-auto">
+      <div class="flex space-x-4">
+        <div
+          *ngFor="let weather of oneDayWeather"
+          class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
+        >
+          <p class="text-sm text-gray-500 dark:text-gray-300">
+            {{ weather.day | date : "EEEE, MMMM d" : "" : "en-US" }}
+          </p>
+
+          <img
+            [src]="weather.iconUrl"
+            [alt]="weather.weather"
+            class="w-12 h-12 my-2"
+            loading="lazy"
+          />
+
+          <p class="text-lg font-semibold text-gray-800 dark:text-white">
+            {{ weather.temperature | tempConverter : unit }}°{{ unit }}
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-300">
+            {{ weather.time }}
+          </p>
+        </div>
       </div>
     </div>
   </div>

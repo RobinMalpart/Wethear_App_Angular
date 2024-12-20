@@ -1,14 +1,14 @@
 <div
   class="card glassmorph p-6 rounded-2xl shadow-lg bg-white dark:bg-gray-800"
 >
-  <div
-    class="flex flex-col md:flex-row items-center md:items-start md:space-x-6"
-  >
+<div
+  class="flex flex-col md:flex-row items-center md:justify-between md:space-x-6"
+>
     <div class="text-center md:text-left mb-4 md:mb-0">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
         {{ locationName }}
       </h2>
-      <h2 class="text-sm text-gray-500 dark:text-gray-300">Weather forecast for the next 3 days</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-300">Weather forecast for the next 3 days</p>
     </div>
     <button class="glassmorph rounded-full" (click)="onToggleFavorite()">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 fill-current" [ngClass]="isFavorite ? 'fill-red-500' : 'fill-white'" viewBox="0 -960 960 960">
