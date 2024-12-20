@@ -1,4 +1,4 @@
-<h2>Favorite</h2>
+<h2>Favorite cities</h2>
 <hr class="my-2" />
 <div class="grid grid-cols-6 gap-4 mb-5">
   <app-card
@@ -14,10 +14,14 @@
 <h2>Last searched cities</h2>
 <hr class="my-2" />
 <div *ngIf="isNotUserConnected">
-  <p class="text-sm italic text-gray-500"> Please login or sign up if you want to see this section</p>
+  <p class="text-sm italic text-gray-500">
+    Please login or sign up if you want to see this section
+  </p>
 </div>
 <div *ngIf="isUserHistoryEmpty">
-  <p class="text-sm italic text-gray-500"> Please search some locations to fill this section</p>
+  <p class="text-sm italic text-gray-500">
+    Please search some locations to fill this section
+  </p>
 </div>
 <div class="grid grid-cols-6 gap-4 mb-5">
   <app-card
@@ -30,7 +34,7 @@
   </app-card>
 </div>
 
-<h2>Top French Cities</h2>
+<h2>Top French cities</h2>
 <hr class="my-2" />
 <div class="grid grid-cols-6 gap-4 mb-5">
   <app-card
