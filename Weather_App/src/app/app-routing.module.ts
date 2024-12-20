@@ -4,6 +4,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { LocationComponent } from './pages/location/location.component';
 import { FavoriteComponent } from './pages/favorite/favorite.component';
 import { HistoryComponent } from './pages/history/history.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
+import { ProtectedComponent } from './pages/protected/protected.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routerOptions: ExtraOptions = {
   onSameUrlNavigation: 'reload',
@@ -11,13 +15,24 @@ const routerOptions: ExtraOptions = {
 };
 
 const routes: Routes = [
-  // { path: 'login', component: LoginComponent },
-  // { path: 'signup', component: SignupComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'location', component: LocationComponent },
   { path: 'favorites', component: FavoriteComponent },
   { path: 'history', component: HistoryComponent },  
+  { path: 'home', component: HomeComponent },
+  { path: 'location', component: LocationComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+
+  // a changer ...
+  {
+    path: 'protected',
+    component: ProtectedComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
