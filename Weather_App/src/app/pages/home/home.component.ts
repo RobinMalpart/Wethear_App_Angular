@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   lastSeenCity: CityWeather[] = [];
   topFrenchCity: CityWeather[] = [];
   isUserHistoryEmpty: boolean = false;
+  isFavoritesEmpty: boolean = false;
   isNotUserConnected: boolean = false;
 
   constructor(
@@ -49,29 +50,37 @@ export class HomeComponent implements OnInit {
     // Favorite cities
     this.favoriteService.getFavoritesByUserId(userId).subscribe(
       (filteredFavorites: any[]) => {
+        if (filteredFavorites.length === 0) {
+          this.isFavoritesEmpty = true;
+          return;
+        }
+
         filteredFavorites.forEach((city) => {
-          this.cityService.getCityFromId(city.location_id).subscribe((cityData) => {
-            if (cityData.length === 0) {
-              console.error('City not found');
-              return;
-            }
-            const long = cityData[0].longitude;
-            const lat = cityData[0].latitude;
-            this.weatherService.getWeather(lat, long).subscribe(
-              (data) => {
-                this.favoriteCity.push({
-                  city: data.name,
-                  weather: data.weather[0].description,
-                  temperature: data.main.temp,
-                  feelsLike: data.main.feels_like,
-                  icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
-                } as CityWeather);
-              },
-              (error) => {
-                console.error(error);
+          this.cityService
+            .getCityFromId(city.location_id)
+            .subscribe((cityData) => {
+              if (cityData.length === 0) {
+                console.error('City not found');
+                return;
               }
-            );
-          });
+              const long = cityData[0].longitude;
+              const lat = cityData[0].latitude;
+              this.weatherService.getWeather(lat, long).subscribe(
+                (data) => {
+                  this.favoriteCity.push({
+                    city: data.name,
+                    weather: data.weather[0].description,
+                    temperature: data.main.temp,
+                    feelsLike: data.main.feels_like,
+                    icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+                  } as CityWeather);
+                  this.isFavoritesEmpty = false;
+                },
+                (error) => {
+                  console.error(error);
+                }
+              );
+            });
         });
       },
       (error) => {
@@ -95,7 +104,9 @@ export class HomeComponent implements OnInit {
         const uniqueHistory = data.filter(
           (history, index, self) =>
             index ===
-            self.findIndex((element) => element.location_id === history.location_id)
+            self.findIndex(
+              (element) => element.location_id === history.location_id
+            )
         );
 
         uniqueHistory.map((history: UserHistory) => {
@@ -110,23 +121,25 @@ export class HomeComponent implements OnInit {
                 return;
               }
 
-              this.weatherService.getWeatherByCity(location.city_name).subscribe(
-                (weather: {
-                  weather: { description: string; icon: string }[];
-                  main: { temp: number; feels_like: number };
-                }) => {
-                  this.lastSeenCity.push({
-                    city: location.city_name,
-                    weather: weather.weather[0].description,
-                    temperature: weather.main.temp,
-                    feelsLike: weather.main.feels_like,
-                    icon: `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
-                  } as CityWeather);
-                },
-                (weatherError) => {
-                  console.error('Error fetching weather data:', weatherError);
-                }
-              );
+              this.weatherService
+                .getWeatherByCity(location.city_name)
+                .subscribe(
+                  (weather: {
+                    weather: { description: string; icon: string }[];
+                    main: { temp: number; feels_like: number };
+                  }) => {
+                    this.lastSeenCity.push({
+                      city: location.city_name,
+                      weather: weather.weather[0].description,
+                      temperature: weather.main.temp,
+                      feelsLike: weather.main.feels_like,
+                      icon: `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
+                    } as CityWeather);
+                  },
+                  (weatherError) => {
+                    console.error('Error fetching weather data:', weatherError);
+                  }
+                );
             },
             (locationError) => {
               console.error('Error fetching location details:', locationError);
