@@ -1,10 +1,15 @@
-<div class="card glassmorph glassBorder">
-  <div class="card-body px-4 py-2">
-    <h2 class="card-title">{{ city }}</h2>
+<div class="card glassmorph glassBorder h-48 flex flex-col justify-between">
+  <div class="card-body px-4 py-2 text-center">
+    <h2 class="card-title text-lg font-bold">{{ city }}</h2>
+    <img
+      *ngIf="icon"
+      [src]="icon"
+      [alt]="weather"
+      class="w-12 h-12 mx-auto my-2"
+    />
     <div>
-      <p class="card-text">{{ weather }} {{ weatherEmoji }}</p>
-      <p class="card-text">{{ temperature }}°C</p>
-      <p class="card-text">{{ feelsLike }}°C Ressenti</p>
+      <p class="card-text text-sm">{{ temperature }}°C</p>
+      <p class="card-text text-sm">Feels like {{ feelsLike }}°C</p>
     </div>
   </div>
 </div>

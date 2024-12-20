@@ -1,12 +1,13 @@
 <h2>Favorite cities</h2>
 <hr class="my-2" />
-<div class="grid grid-cols-6 gap-4 mb-5">
+<div class="grid grid-cols-6 gap-4 mb-5 pt-3">
   <app-card
     *ngFor="let item of favoriteCity"
     [city]="item.city"
     [weather]="item.weather"
     [temperature]="item.temperature"
     [feelsLike]="item.feelsLike"
+    [icon]="item.icon"
   >
   </app-card>
 </div>
@@ -23,26 +24,28 @@
     Please search some locations to fill this section
   </p>
 </div>
-<div class="grid grid-cols-6 gap-4 mb-5">
+<div class="grid grid-cols-6 gap-4 mb-5 pt-3">
   <app-card
     *ngFor="let item of lastSeenCity"
     [city]="item.city"
     [weather]="item.weather"
     [temperature]="item.temperature"
     [feelsLike]="item.feelsLike"
+    [icon]="item.icon"
   >
   </app-card>
 </div>
 
 <h2>Top French cities</h2>
 <hr class="my-2" />
-<div class="grid grid-cols-6 gap-4 mb-5">
+<div class="grid grid-cols-6 gap-4 mb-5 pt-3">
   <app-card
     *ngFor="let item of topFrenchCity"
     [city]="item.city"
     [weather]="item.weather"
     [temperature]="item.temperature"
     [feelsLike]="item.feelsLike"
+    [icon]="item.icon"
   >
   </app-card>
 </div>

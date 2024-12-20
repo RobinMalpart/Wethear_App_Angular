@@ -25,12 +25,10 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // hard init wait for login
     const topCities = ['Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice'];
-
     const favoriteCity = 'Lille';
-
-    // top French cities
+  
+    // Top French cities
     topCities.forEach((city) => {
       this.weatherService.getWeatherByCity(city).subscribe(
         (data) => {
@@ -39,6 +37,7 @@ export class HomeComponent implements OnInit {
             weather: data.weather[0].description,
             temperature: data.main.temp,
             feelsLike: data.main.feels_like,
+            icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
           } as CityWeather);
         },
         (error) => {
@@ -46,54 +45,48 @@ export class HomeComponent implements OnInit {
         }
       );
     });
-
-    // favorite city test
+  
+    // Favorite cities
     this.favoriteService.getFavorites().subscribe((data) => {
       for (const city of data as any) {
-        console.log('All Favorite', city);
-        this.cityService
-          .getCityFromId(city.location_id)
-          .subscribe((cityData) => {
-            if (cityData.length === 0) {
-              console.error('City not found');
+        this.cityService.getCityFromId(city.location_id).subscribe((cityData) => {
+          if (cityData.length === 0) {
+            console.error('City not found');
+          }
+          const long = cityData[0].longitude;
+          const lat = cityData[0].latitude;
+          this.weatherService.getWeather(lat, long).subscribe(
+            (data) => {
+              this.favoriteCity.push({
+                city: data.name,
+                weather: data.weather[0].description,
+                temperature: data.main.temp,
+                feelsLike: data.main.feels_like,
+                icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+              } as CityWeather);
+            },
+            (error) => {
+              console.error(error);
             }
-            console.log('datacity', cityData);
-            const long = cityData[0].longitude;
-            const lat = cityData[0].latitude;
-            this.weatherService.getWeather(lat, long).subscribe(
-              (data) => {
-                console.log('data', data);
-                this.favoriteCity.push({
-                  city: data.name,
-                  weather: data.weather[0].description,
-                  temperature: data.main.temp,
-                  feelsLike: data.main.feels_like,
-                } as CityWeather);
-              },
-              (error) => {
-                console.error(error);
-              }
-            );
-          });
+          );
+        });
       }
-
+  
       // Last searched cities
       const userId = '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p';
-
+  
       if (!userId) {
         this.isNotUserConnected = true;
         return;
       }
-
+  
       this.jsonServerService.getUserHistoryByUserId(userId).subscribe(
         (data: UserHistory[]) => {
-          // User hasn't searched any city yet
           if (data.length === 0) {
             this.isUserHistoryEmpty = true;
             return;
           }
-
-          // Filter out duplicate location_ids in the user history
+  
           const uniqueHistory = data.filter(
             (history, index, self) =>
               index ===
@@ -101,10 +94,10 @@ export class HomeComponent implements OnInit {
                 (element) => element.location_id === history.location_id
               )
           );
-
+  
           uniqueHistory.map((history: UserHistory) => {
             let locationId: string = history.location_id;
-
+  
             this.jsonServerService.getLocationById(locationId).subscribe(
               (location: { city_name: string }) => {
                 if (!location || !location.city_name) {
@@ -113,12 +106,12 @@ export class HomeComponent implements OnInit {
                   );
                   return;
                 }
-
+  
                 this.weatherService
                   .getWeatherByCity(location.city_name)
                   .subscribe(
                     (weather: {
-                      weather: { description: string }[];
+                      weather: { description: string; icon: string }[];
                       main: { temp: number; feels_like: number };
                     }) => {
                       this.lastSeenCity.push({
@@ -126,6 +119,7 @@ export class HomeComponent implements OnInit {
                         weather: weather.weather[0].description,
                         temperature: weather.main.temp,
                         feelsLike: weather.main.feels_like,
+                        icon: `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
                       } as CityWeather);
                     },
                     (weatherError) => {
@@ -137,10 +131,7 @@ export class HomeComponent implements OnInit {
                   );
               },
               (locationError) => {
-                console.error(
-                  'Error fetching location details:',
-                  locationError
-                );
+                console.error('Error fetching location details:', locationError);
               }
             );
           });
@@ -151,4 +142,4 @@ export class HomeComponent implements OnInit {
       );
     });
   }
-}
+}  
