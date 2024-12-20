@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { WeatherService } from 'src/app/services/weather/weather.service';
+import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 
 @Component({
   selector: 'app-location',
@@ -38,13 +39,18 @@ export class LocationComponent implements OnInit, OnDestroy {
   currentWeatherType: string = 'daily';
   unit: string = 'C';
 
+  locationId: string = '';
+  isFavorite: boolean = true;
+  userId: string = '1';
+
   private errorSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private weatherService: WeatherService,
     private sharedService: SharedService,
-    private jsonServerService: JsonServerService
+    private jsonServerService: JsonServerService,
+    private favoriteService: FavoriteService
   ) {}
 
   ngOnInit(): void {
@@ -93,10 +99,14 @@ export class LocationComponent implements OnInit, OnDestroy {
             // change with userId
             this.jsonServerService
               .addLocationAndSearch('1', city, lat, lon)
-              .subscribe({
+              .subscribe({  
                 next: (result) => {
                   console.log('Location and Search added:', result);
+                  this.locationId = result.ville.id
                   // Optionally, display a success message to the user
+                  // Check if the location is a favorite
+                  this.getCheckFavorite(this.userId, this.locationId);
+                  console.log('isFavorite', this.isFavorite);
                 },
                 error: (error) => {
                   console.error('Error adding Location and Search:', error);
@@ -245,6 +255,48 @@ export class LocationComponent implements OnInit, OnDestroy {
         );
         this.hasSearched = false;
         this.isLoading = false;
+      },
+    });
+  }
+
+  addFavorite(userId: string, locationId: string): void {
+    if (this.isFavorite) {
+      this.favoriteService.removeFavorite(userId, locationId).subscribe({
+        next: () => {
+          console.log('Favorite removed');
+          this.isFavorite = false;
+        },
+        error: (error) => {
+          console.error('Error removing favorite:', error);
+        },
+      });
+    } else {
+      this.favoriteService.addFavorite(userId, locationId).subscribe({
+        next: () => {
+          console.log('Favorite added');
+          this.isFavorite = true;
+        },
+        error: (error) => {
+          console.error('Error adding favorite:', error);
+        },
+      });
+    }
+  }
+
+  getCheckFavorite(userId: string, locationId: string): void {
+    console.log('getCheckFavorite', userId, locationId);
+    this.favoriteService.getFavoritesByUserId(userId).subscribe({
+      next: (favorites: any) => {
+        console.log('favorites getcheck', favorites);
+        favorites.forEach((favorite: any) => {
+          if (favorite.location_id === locationId) {
+            this.isFavorite = true;
+          }
+        console.log('isFavorite', this.isFavorite);
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching favorites:', error);
       },
     });
   }
