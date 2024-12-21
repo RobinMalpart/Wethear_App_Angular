@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
@@ -8,8 +8,14 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000';
+  private userIdSubject = new BehaviorSubject<string | null>(this.getUserIdFromStorage());
+  userId$ = this.userIdSubject.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  private getUserIdFromStorage(): string | null {
+    return localStorage.getItem('userId');
+  }
 
   signup(email: string, password: string): Observable<any> {
     return this.http.get<any[]>(`${this.apiUrl}/users?email=${email}`).pipe(
@@ -22,7 +28,7 @@ export class AuthService {
       }),
       catchError((error) => {
         console.error('Signup error:', error);
-        return throwError(() => new Error('An error occurred during signup'));
+        return throwError(() => new Error(error));
       })
     );
   }
@@ -33,9 +39,9 @@ export class AuthService {
       .pipe(
         map((users) => {
           if (users.length > 0) {
-            console.log(users);
             const user = users[0];
             localStorage.setItem('userId', user.id);
+            this.userIdSubject.next(user.id);
             return user.id;
           } else {
             throw new Error('Invalid credentials');
@@ -43,18 +49,18 @@ export class AuthService {
         }),
         catchError((error) => {
           console.error('Login error:', error);
-          return throwError(() => new Error('An error occurred during login'));
+          return throwError(() => new Error(error));
         })
       );
   }
 
   isAuthenticated(): boolean {
-    const userId = localStorage.getItem('userId');
+    const userId = this.userIdSubject.value;
     return !!userId;
   }
-  
-  getUser(): string | null {
-    const userId = localStorage.getItem('userId');
+
+  getUserId(): string | null {
+    const userId = this.userIdSubject.value;
     if (!userId) {
       console.warn('No userId found in localStorage');
       return null;
@@ -64,5 +70,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('userId');
+    this.userIdSubject.next(null);
   }
 }

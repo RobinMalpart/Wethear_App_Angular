@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 
@@ -14,11 +15,16 @@ export class HeaderComponent implements OnInit {
   value: string = 'Daily';
   errorMessage: string | null = null;
 
+  isAuthenticated: boolean = false;
+  private authSubscription!: Subscription;
+
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private sharedService: SharedService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +37,16 @@ export class HeaderComponent implements OnInit {
     this.sharedService.errorMessage$.subscribe(message => {
       this.errorMessage = message;
     });
+
+    this.authSubscription = this.authService.userId$.subscribe((userId) => {
+      this.isAuthenticated = !!userId;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   onSubmit(): void {

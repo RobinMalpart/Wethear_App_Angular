@@ -5,6 +5,7 @@ import { CityService } from 'src/app/services/city/city.service';
 import { CityWeather, UserHistory } from 'src/app/models/weather';
 import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -24,12 +25,13 @@ export class HomeComponent implements OnInit {
     private favoriteService: FavoriteService,
     private cityService: CityService,
     private jsonServerService: JsonServerService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     const topCities = ['Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice'];
-    const userId = '1';
+    const userId = this.authService.getUserId()|| '';
 
     // Top French cities
     topCities.forEach((city) => {
