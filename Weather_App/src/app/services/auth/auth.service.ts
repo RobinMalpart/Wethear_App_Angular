@@ -33,8 +33,9 @@ export class AuthService {
       .pipe(
         map((users) => {
           if (users.length > 0) {
+            console.log(users);
             const user = users[0];
-            localStorage.setItem('authToken', user.id); // Stocker l'ID de l'utilisateur comme authToken
+            localStorage.setItem('userId', user.id);
             return user.id;
           } else {
             throw new Error('Invalid credentials');
@@ -48,11 +49,20 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('authToken');
-    return !!token;
+    const userId = localStorage.getItem('userId');
+    return !!userId;
+  }
+  
+  getUser(): string | null {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.warn('No userId found in localStorage');
+      return null;
+    }
+    return userId;
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
   }
 }

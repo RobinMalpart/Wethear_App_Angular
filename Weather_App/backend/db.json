@@ -1,5 +1,16 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "0822",
+      "email": "sarabev6@gmail.com",
+      "password": "Hello123!"
+    },
+    {
+      "id": "dfe9",
+      "email": "titi@gmail.com",
+      "password": "titi"
+    }
+  ],
   "locations": [
     {
       "id": "35cb425d-73ad-4e44-a1c7-e0eb047087c8",
@@ -80,6 +91,12 @@
       "user_id": "1",
       "location_id": "44f63b9f-1402-4f2e-84b3-4df6b3a92cfa",
       "consulted_at": "2024-12-20T23:54:04.417Z"
+    },
+    {
+      "id": "3fd3d03c-24fd-4e6a-b4e3-34bd6a441292",
+      "user_id": "1",
+      "location_id": "5dcb5216-9cfc-453a-af45-7d09d289bf13",
+      "consulted_at": "2024-12-21T06:33:15.040Z"
     }
   ]
 }
