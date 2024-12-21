@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-signup-form',
   templateUrl: './signup-form.component.html',
@@ -18,13 +17,25 @@ export class SignupFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router
   ) {
-    this.signupForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
+    this.signupForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required],
+      },
+      {
+        validator: this.passwordsMatchValidator,
+      }
+    );
   }
 
   ngOnInit(): void {}
+
+  private passwordsMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordsMismatch: true };
+  }
 
   onSubmit(): void {
     if (this.signupForm.valid) {
@@ -38,7 +49,6 @@ export class SignupFormComponent implements OnInit {
           this.router.navigate(['/login']);
         },
         (error) => {
-          console.error('Signup failed:', error);
           this.snackBar.open('Signup failed: ' + error.message, 'Close', {
             duration: 5000,
           });
