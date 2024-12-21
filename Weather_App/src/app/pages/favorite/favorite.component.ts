@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 import { FavoriteService } from 'src/app/services/favorite/favorite.service';
-import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
+import { UserHistoryService } from 'src/app/services/userHistory/userHistory';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class FavoriteComponent implements OnInit {
   constructor(
     private favoriteService: FavoriteService,
     private weatherService: WeatherService,
-    private jsonServerService: JsonServerService,
+    private userHistoryService: UserHistoryService,
     private authService: AuthService
   ) {}
 
@@ -27,16 +27,14 @@ export class FavoriteComponent implements OnInit {
     this.favoriteService.getFavoritesByUserId(this.userId).subscribe(
       (favorites: any) => {
         favorites.forEach((favorite: any) => {
-          this.jsonServerService
+          this.userHistoryService
             .getLocationById(favorite.location_id)
             .subscribe(
               (location: any) => {
-                console.log(location);
                 const long = location.longitude;
                 const lat = location.latitude;
                 this.weatherService.getWeather(lat, long).subscribe(
                   (data: any) => {
-                    console.log(data);
                     this.isLoading = false;
                     this.favorites.push({
                       city: data.name,
@@ -56,9 +54,5 @@ export class FavoriteComponent implements OnInit {
       },
       (error) => console.error('Error fetching favorites:', error)
     );
-
-    setTimeout(() => {
-      console.log(this.favorites);
-    }, 500);
   }
 }

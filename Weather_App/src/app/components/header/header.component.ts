@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { SharedService } from 'src/app/services/shared/shared.service';
+import { MessageService } from 'src/app/services/message/shared.service';
 
 @Component({
   selector: 'app-header',
@@ -22,9 +22,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private sharedService: SharedService,
+    private messageService: MessageService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +33,7 @@ export class HeaderComponent implements OnInit {
       timeOption: ['Daily'],
     });
 
-    this.sharedService.errorMessage$.subscribe(message => {
+    this.messageService.errorMessage$.subscribe(message => {
       this.errorMessage = message;
     });
 
@@ -68,9 +67,9 @@ export class HeaderComponent implements OnInit {
         });
 
       this.errorMessage = null;
-      this.sharedService.setErrorMessage(null);
+      this.messageService.setErrorMessage(null);
     } else {
-      this.sharedService.setErrorMessage('Please enter a valid city name.');
+      this.messageService.setErrorMessage('Please enter a valid city name.');
     }
   }
 

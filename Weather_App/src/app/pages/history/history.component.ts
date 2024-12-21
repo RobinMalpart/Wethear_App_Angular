@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from 'src/app/services/weather/weather.service';
-import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
+import { UserHistoryService } from 'src/app/services/userHistory/userHistory';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -15,23 +15,21 @@ export class HistoryComponent {
 
   constructor(
     private weatherService: WeatherService,
-    private jsonServerService: JsonServerService,
+    private userHistoryService: UserHistoryService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.userId = this.authService.getUserId() || '';
-    this.jsonServerService.getUserHistoryByUserId(this.userId).subscribe(
+    this.userHistoryService.getUserHistoryByUserId(this.userId).subscribe(
       (searches: any) => {
         searches.forEach((search: any) => {
-          this.jsonServerService.getLocationById(search.location_id).subscribe(
+          this.userHistoryService.getLocationById(search.location_id).subscribe(
             (location: any) => {
-              console.log(location);
               const long = location.longitude;
               const lat = location.latitude;
               this.weatherService.getWeather(lat, long).subscribe(
                 (data: any) => {
-                  console.log(data);
                   this.isLoading = false;
                   this.history.push({
                     city: data.name,

@@ -12,7 +12,7 @@ import { Location, UserHistory } from 'src/app/models/weather';
 @Injectable({
   providedIn: 'root',
 })
-export class JsonServerService {
+export class UserHistoryService {
   private locationApiUrl = 'http://localhost:3000/locations';
   private userHistoryApiUrl = 'http://localhost:3000/user_history';
 
@@ -41,75 +41,80 @@ export class JsonServerService {
     villeName: string,
     coordinateX: number,
     coordinateY: number
-  ): Observable<{ ville: Location; search: UserHistory }> {
-    return this.http
-      .get<Location[]>(this.locationApiUrl, this.httpOptions)
-      .pipe(
-        switchMap((locations: Location[]) => {
-          const existingLocation = locations.find(
-            (loc) =>
-              loc.city_name === villeName &&
-              loc.latitude === coordinateX &&
-              loc.longitude === coordinateY
-          );
-
-          if (existingLocation) {
-            const newSearch: any = {
-              id: uuidv4(),
-              user_id: userId,
-              location_id: existingLocation.id,
-              consulted_at: new Date().toISOString(),
-            };
-            return this.addSearch(newSearch).pipe(
-              switchMap((createdSearch: UserHistory) => {
-                return new Observable<{ ville: Location; search: UserHistory }>(
-                  (observer) => {
-                    observer.next({
-                      ville: existingLocation,
-                      search: createdSearch,
-                    });
-                    observer.complete();
-                  }
-                );
-              })
-            );
-          } else {
-            const newVille: any = {
-              id: uuidv4(),
-              city_name: villeName,
-              latitude: coordinateX,
-              longitude: coordinateY,
-            };
-
-            return this.addLocation(newVille).pipe(
-              switchMap((createdVille: Location) => {
-                const newSearch: any = {
+  ): Observable<{ ville: Location; search?: UserHistory }> {
+    return this.http.get<Location[]>(this.locationApiUrl, this.httpOptions).pipe(
+      switchMap((locations: Location[]) => {
+        const existingLocation = locations.find(
+          (loc) =>
+            loc.city_name === villeName &&
+            loc.latitude === coordinateX &&
+            loc.longitude === coordinateY
+        );
+  
+        if (existingLocation) {
+          const userHistoryUrl = `${this.userHistoryApiUrl}?user_id=${userId}&location_id=${existingLocation.id}`;
+          return this.http.get<UserHistory[]>(userHistoryUrl, this.httpOptions).pipe(
+            switchMap((userHistories: UserHistory[]) => {
+              if (userHistories.length > 0) {
+                return new Observable<{ ville: Location; search?: UserHistory }>((observer) => {
+                  observer.next({ ville: existingLocation });
+                  observer.complete();
+                });
+              } else {
+                const newSearch: UserHistory = {
                   id: uuidv4(),
                   user_id: userId,
-                  location_id: createdVille.id,
+                  location_id: existingLocation.id,
                   consulted_at: new Date().toISOString(),
                 };
                 return this.addSearch(newSearch).pipe(
                   switchMap((createdSearch: UserHistory) => {
-                    return new Observable<{
-                      ville: Location;
-                      search: UserHistory;
-                    }>((observer) => {
+                    return new Observable<{ ville: Location; search: UserHistory }>((observer) => {
                       observer.next({
-                        ville: createdVille,
+                        ville: existingLocation,
                         search: createdSearch,
                       });
                       observer.complete();
                     });
                   })
                 );
-              })
-            );
-          }
-        }),
-        catchError(this.handleError)
-      );
-  }
+              }
+            })
+          );
+        } else {
+          const newVille: Location = {
+            id: uuidv4(),
+            city_name: villeName,
+            latitude: coordinateX,
+            longitude: coordinateY,
+          };
+  
+          return this.addLocation(newVille).pipe(
+            switchMap((createdVille: Location) => {
+              const newSearch: UserHistory = {
+                id: uuidv4(),
+                user_id: userId,
+                location_id: createdVille.id,
+                consulted_at: new Date().toISOString(),
+              };
+              return this.addSearch(newSearch).pipe(
+                switchMap((createdSearch: UserHistory) => {
+                  return new Observable<{ ville: Location; search: UserHistory }>((observer) => {
+                    observer.next({
+                      ville: createdVille,
+                      search: createdSearch,
+                    });
+                    observer.complete();
+                  });
+                })
+              );
+            })
+          );
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }  
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';

@@ -1,8 +1,16 @@
-import { Component, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  SimpleChanges,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   selector: 'app-three-days-card',
   templateUrl: './three-days-card.component.html',
-  styleUrls: ['./three-days-card.component.css']
+  styleUrls: ['./three-days-card.component.css'],
 })
 export class ThreeDaysCardComponent {
   @Input() locationName: string = '';
@@ -16,11 +24,30 @@ export class ThreeDaysCardComponent {
   @Input() userId: string = '';
   @Input() locationId: string = '';
 
-  @Output() toggleFavorite = new EventEmitter<{ userId: string; locationId: string }>();
+  @Output() toggleFavorite = new EventEmitter<{
+    userId: string;
+    locationId: string;
+  }>();
 
   firstDayWeather: any[] = [];
   secondDayWeather: any[] = [];
   thirdDayWeather: any[] = [];
+  isAuthenticated: boolean = false;
+  private authSubscription!: Subscription;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authSubscription = this.authService.userId$.subscribe((userId) => {
+      this.isAuthenticated = !!userId;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['threeDaysWeather'] && this.threeDaysWeather.length > 0) {
@@ -39,6 +66,9 @@ export class ThreeDaysCardComponent {
   }
 
   onToggleFavorite(): void {
-    this.toggleFavorite.emit({ userId: this.userId, locationId: this.locationId });
+    this.toggleFavorite.emit({
+      userId: this.userId,
+      locationId: this.locationId,
+    });
   }
 }

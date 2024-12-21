@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
-import { SharedService } from 'src/app/services/shared/shared.service';
+import { UserHistoryService } from 'src/app/services/userHistory/userHistory';
+import { MessageService } from 'src/app/services/message/shared.service';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -16,8 +16,8 @@ export class LocationComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private weatherService: WeatherService,
-    private sharedService: SharedService,
-    private jsonServerService: JsonServerService,
+    private messageService: MessageService,
+    private userHistoryService: UserHistoryService,
     private favoriteService: FavoriteService,
     private authService: AuthService
   ) {}
@@ -53,7 +53,7 @@ export class LocationComponent implements OnInit, OnDestroy {
   private errorSubscription!: Subscription;
 
   ngOnInit(): void {
-    this.errorSubscription = this.sharedService.errorMessage$.subscribe(
+    this.errorSubscription = this.messageService.errorMessage$.subscribe(
       (message) => {
         this.errorMessage = message ?? '';
       }
@@ -69,7 +69,7 @@ export class LocationComponent implements OnInit, OnDestroy {
       if (city) {
         this.searchWeather(city, timeOption);
       } else {
-        this.sharedService.setErrorMessage('No city specified.');
+        this.messageService.setErrorMessage('No city specified.');
       }
     });
   }
@@ -93,17 +93,17 @@ export class LocationComponent implements OnInit, OnDestroy {
             }
             this.recordLocationAndCheckFavorite(city, lat, lon);
           } else {
-            this.sharedService.setErrorMessage('City not found. Please try again.');
+            this.messageService.setErrorMessage('City not found. Please try again.');
             this.hasSearched = false;
           }
         },
         error: () => {
-          this.sharedService.setErrorMessage('Error fetching data. Please try again.');
+          this.messageService.setErrorMessage('Error fetching data. Please try again.');
           this.hasSearched = false;
         },
       });
     } else {
-      this.sharedService.setErrorMessage('Please enter a valid city name.');
+      this.messageService.setErrorMessage('Please enter a valid city name.');
     }
   }
 
@@ -111,11 +111,11 @@ export class LocationComponent implements OnInit, OnDestroy {
     this.oneDayWeather = [];
     this.threeDaysWeather = [];
     this.hasSearched = false;
-    this.sharedService.setErrorMessage('');
+    this.messageService.setErrorMessage('');
   }
 
   recordLocationAndCheckFavorite(city: string, lat: number, lon: number): void {
-    this.jsonServerService.addLocationAndSearch(this.userId, city, lat, lon).subscribe({
+    this.userHistoryService.addLocationAndSearch(this.userId, city, lat, lon).subscribe({
       next: (result) => {
         this.locationId = result?.ville?.id ?? '';
         if (this.locationId) {
@@ -124,7 +124,7 @@ export class LocationComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error adding Location and Search:', error);
-        this.sharedService.setErrorMessage('Failed to record your search.');
+        this.messageService.setErrorMessage('Failed to record your search.');
       },
     });
   }
@@ -137,7 +137,7 @@ export class LocationComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Weather Data Error:', err);
-        this.sharedService.setErrorMessage('Error fetching weather data.');
+        this.messageService.setErrorMessage('Error fetching weather data.');
         this.hasSearched = false;
         this.isLoading = false;
       },
@@ -152,7 +152,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (err) => {
-        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
+        this.messageService.setErrorMessage('Error fetching weather forecast data.');
         this.hasSearched = false;
         this.isLoading = false;
       },
@@ -168,7 +168,7 @@ export class LocationComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error fetching current weather data:', err);
-        this.sharedService.setErrorMessage('Error fetching current weather data.');
+        this.messageService.setErrorMessage('Error fetching current weather data.');
         this.isLoading = false;
       },
     });
@@ -191,7 +191,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (err) => {
-        this.sharedService.setErrorMessage('Error fetching weather forecast data.');
+        this.messageService.setErrorMessage('Error fetching weather forecast data.');
         this.isLoading = false;
       },
     });
@@ -211,10 +211,8 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   addFavorite(userId: string, locationId: string): void {
     if (this.isFavorite) {
-      console.log('Removing favorite...');
       this.favoriteService.removeFavorite(userId, locationId).subscribe({
         next: () => {
-          console.log('Favorite successfully removed:', { userId, locationId });
           this.isFavorite = false;
         },
         error: (error) => {
@@ -222,10 +220,8 @@ export class LocationComponent implements OnInit, OnDestroy {
         },
       });
     } else {
-      console.log('Adding favorite...');
       this.favoriteService.addFavorite(userId, locationId).subscribe({
         next: () => {
-          console.log('Favorite successfully added:', { userId, locationId });
           this.isFavorite = true;
         },
         error: (error) => {
@@ -236,11 +232,9 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   getCheckFavorite(userId: string, locationId: string): void {
-    console.log('getCheckFavorite', userId, locationId);
     this.favoriteService.getFavoritesByUserId(userId).subscribe({
       next: (favorites) => {
         this.isFavorite = favorites.some((favorite: any) => favorite.location_id === locationId);
-        console.log('isFavorite:', this.isFavorite);
       },
       error: (error) => {
         console.error('Error fetching favorites:', error);

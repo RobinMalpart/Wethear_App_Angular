@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class SharedService {
+export class MessageService {
   private errorMessageSource = new BehaviorSubject<string | null>(null);
 
   errorMessage$ = this.errorMessageSource.asObservable();
