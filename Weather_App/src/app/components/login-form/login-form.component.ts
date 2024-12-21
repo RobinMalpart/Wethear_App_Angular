@@ -30,15 +30,13 @@ export class LoginFormComponent implements OnInit {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
       this.authService.login(email, password).subscribe(
-        (userId) => {
-          console.log('Login successful:', userId);
+        () => {
           this.snackBar.open('Login successful!', 'Close', {
             duration: 5000,
           });
           this.router.navigate(['/home']);
         },
         (error) => {
-          console.error('Login failed:', error);
           this.snackBar.open('Login failed: ' + error.message, 'Close', {
             duration: 5000,
           });

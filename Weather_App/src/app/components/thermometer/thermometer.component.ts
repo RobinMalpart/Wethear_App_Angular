@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class ThermometerComponent {
   @Input() temperature: number | null = 0;
+  @Input() unit: string = 'C';
 
   get validTemperature(): number {
     return this.temperature ?? 0;

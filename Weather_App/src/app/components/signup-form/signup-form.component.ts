@@ -41,8 +41,7 @@ export class SignupFormComponent implements OnInit {
     if (this.signupForm.valid) {
       const { email, password } = this.signupForm.value;
       this.authService.signup(email, password).subscribe(
-        (response) => {
-          console.log('Signup successful:', response);
+        () => {
           this.snackBar.open('Signup successful!', 'Close', {
             duration: 5000,
           });

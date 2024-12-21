@@ -38,7 +38,6 @@ export class FavoriteService {
     return new Observable(observer => {
       this.getFavorites().subscribe(
         (favorites: any) => {
-          console.log('favorites', favorites);
           const filteredFavorites = favorites.filter((favorite: any) => favorite.user_id === userId);
           observer.next(filteredFavorites);
           observer.complete();
@@ -53,9 +52,6 @@ export class FavoriteService {
 
 
   removeFavorite(userId: string, locationId: string): Observable<any> {
-    console.log('FavoriteService removeFavorite');
-    console.log('userId', userId);
-    console.log('locationId', locationId);
     return new Observable(observer => {
       // Adjust URL to match JSON Server's expected structure
       this.http

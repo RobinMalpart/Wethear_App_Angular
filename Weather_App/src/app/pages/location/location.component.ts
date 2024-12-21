@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
+import { UserHistoryService } from 'src/app/services/userHistory/userHistory';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 import { FavoriteService } from 'src/app/services/favorite/favorite.service';
@@ -17,7 +17,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private weatherService: WeatherService,
     private sharedService: SharedService,
-    private jsonServerService: JsonServerService,
+    private userHistoryService: UserHistoryService,
     private favoriteService: FavoriteService,
     private authService: AuthService
   ) {}
@@ -115,7 +115,7 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   recordLocationAndCheckFavorite(city: string, lat: number, lon: number): void {
-    this.jsonServerService.addLocationAndSearch(this.userId, city, lat, lon).subscribe({
+    this.userHistoryService.addLocationAndSearch(this.userId, city, lat, lon).subscribe({
       next: (result) => {
         this.locationId = result?.ville?.id ?? '';
         if (this.locationId) {
@@ -211,10 +211,8 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   addFavorite(userId: string, locationId: string): void {
     if (this.isFavorite) {
-      console.log('Removing favorite...');
       this.favoriteService.removeFavorite(userId, locationId).subscribe({
         next: () => {
-          console.log('Favorite successfully removed:', { userId, locationId });
           this.isFavorite = false;
         },
         error: (error) => {
@@ -222,10 +220,8 @@ export class LocationComponent implements OnInit, OnDestroy {
         },
       });
     } else {
-      console.log('Adding favorite...');
       this.favoriteService.addFavorite(userId, locationId).subscribe({
         next: () => {
-          console.log('Favorite successfully added:', { userId, locationId });
           this.isFavorite = true;
         },
         error: (error) => {
@@ -236,11 +232,9 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   getCheckFavorite(userId: string, locationId: string): void {
-    console.log('getCheckFavorite', userId, locationId);
     this.favoriteService.getFavoritesByUserId(userId).subscribe({
       next: (favorites) => {
         this.isFavorite = favorites.some((favorite: any) => favorite.location_id === locationId);
-        console.log('isFavorite:', this.isFavorite);
       },
       error: (error) => {
         console.error('Error fetching favorites:', error);

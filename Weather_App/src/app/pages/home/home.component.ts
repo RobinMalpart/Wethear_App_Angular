@@ -3,7 +3,7 @@ import { WeatherService } from 'src/app/services/weather/weather.service';
 import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 import { CityService } from 'src/app/services/city/city.service';
 import { CityWeather, UserHistory } from 'src/app/models/weather';
-import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
+import { UserHistoryService } from 'src/app/services/userHistory/userHistory';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     private weatherService: WeatherService,
     private favoriteService: FavoriteService,
     private cityService: CityService,
-    private jsonServerService: JsonServerService,
+    private userHistoryService: UserHistoryService,
     private router: Router,
     private authService: AuthService,
   ) {}
@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.jsonServerService.getUserHistoryByUserId(userId).subscribe(
+    this.userHistoryService.getUserHistoryByUserId(userId).subscribe(
       (data: UserHistory[]) => {
         if (data.length === 0) {
           this.isUserHistoryEmpty = true;
@@ -116,7 +116,7 @@ export class HomeComponent implements OnInit {
         uniqueHistory.map((history: UserHistory) => {
           const locationId: string = history.location_id;
 
-          this.jsonServerService.getLocationById(locationId).subscribe(
+          this.userHistoryService.getLocationById(locationId).subscribe(
             (location: { city_name: string }) => {
               if (!location || !location.city_name) {
                 console.error(

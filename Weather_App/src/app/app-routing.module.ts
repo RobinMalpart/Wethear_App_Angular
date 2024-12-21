@@ -6,7 +6,6 @@ import { FavoriteComponent } from './pages/favorite/favorite.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
-import { ProtectedComponent } from './pages/protected/protected.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routerOptions: ExtraOptions = {
@@ -25,14 +24,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-
-  // a changer ...
-  {
-    path: 'protected',
-    component: ProtectedComponent,
-    canActivate: [AuthGuard],
-  }
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({

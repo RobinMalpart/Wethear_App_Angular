@@ -12,7 +12,7 @@ import { Location, UserHistory } from 'src/app/models/weather';
 @Injectable({
   providedIn: 'root',
 })
-export class JsonServerService {
+export class UserHistoryService {
   private locationApiUrl = 'http://localhost:3000/locations';
   private userHistoryApiUrl = 'http://localhost:3000/user_history';
 
