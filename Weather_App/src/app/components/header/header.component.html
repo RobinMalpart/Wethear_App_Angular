@@ -62,7 +62,8 @@
     </div>
   </form>
   <div class="flex gap-4">
-    <button routerLink="/login" class="btnGlassHeader">Login</button>
-    <button routerLink="/register" class="btnGlassHeader">Register</button>
+    <button *ngIf="!isAuthenticated" routerLink="/login" class="btnGlassHeader">Login</button>
+    <button *ngIf="!isAuthenticated" routerLink="/signup" class="btnGlassHeader">Signup</button>
+    <button *ngIf="isAuthenticated" (click)="logout()" class="btnGlassHeader">Logout</button>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.servic
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 import { FavoriteService } from 'src/app/services/favorite/favorite.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-location',
@@ -12,6 +13,15 @@ import { FavoriteService } from 'src/app/services/favorite/favorite.service';
   styleUrls: ['./location.component.css'],
 })
 export class LocationComponent implements OnInit, OnDestroy {
+  constructor(
+    private route: ActivatedRoute,
+    private weatherService: WeatherService,
+    private sharedService: SharedService,
+    private jsonServerService: JsonServerService,
+    private favoriteService: FavoriteService,
+    private authService: AuthService
+  ) {}
+
   locationName = '';
   mainTemperature = 0;
   weatherDescription = '';
@@ -39,17 +49,8 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   locationId = '';
   isFavorite = false;
-  userId = '1';
-
+  userId = this.authService.getUserId()|| '';
   private errorSubscription!: Subscription;
-
-  constructor(
-    private route: ActivatedRoute,
-    private weatherService: WeatherService,
-    private sharedService: SharedService,
-    private jsonServerService: JsonServerService,
-    private favoriteService: FavoriteService
-  ) {}
 
   ngOnInit(): void {
     this.errorSubscription = this.sharedService.errorMessage$.subscribe(
