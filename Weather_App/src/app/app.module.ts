@@ -16,10 +16,12 @@ import { ThreeDaysCardComponent } from './components/three-days-card/three-days-
 import { TemperatureConverterPipe } from './pipes/temperature-converter.pipe';
 import { TemperatureColorDirective } from './directives/temperature-color.directive';
 import { ThermometerComponent } from './components/thermometer/thermometer.component';
+import { FavoriteComponent } from './pages/favorite/favorite.component';
+import { HistoryComponent } from './pages/history/history.component';
 
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, HeaderComponent, CardComponent, LocationComponent, DailyDetailedCardComponent, ThreeDaysCardComponent, TemperatureConverterPipe, TemperatureColorDirective, ThermometerComponent],
+  declarations: [AppComponent, HomeComponent, HeaderComponent, CardComponent, LocationComponent, DailyDetailedCardComponent, ThreeDaysCardComponent, TemperatureConverterPipe, TemperatureColorDirective, ThermometerComponent, FavoriteComponent, HistoryComponent],
   imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule, CommonModule],
   providers: [],
   bootstrap: [AppComponent],

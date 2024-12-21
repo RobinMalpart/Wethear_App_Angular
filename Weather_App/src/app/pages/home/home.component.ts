@@ -4,6 +4,7 @@ import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 import { CityService } from 'src/app/services/city/city.service';
 import { CityWeather, UserHistory } from 'src/app/models/weather';
 import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,8 @@ export class HomeComponent implements OnInit {
     private weatherService: WeatherService,
     private favoriteService: FavoriteService,
     private cityService: CityService,
-    private jsonServerService: JsonServerService
+    private jsonServerService: JsonServerService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -152,4 +154,22 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
+      //Button Favorites
+      NavToFavorites() {
+        this.router.navigate(['/favorites'], {
+          queryParams: {
+            userId: 'userId',
+          },
+        });
+      }
+  
+      //Button History
+      NavToHistory() {
+      this.router.navigate(['/history'], {
+        queryParams: {
+          userId: 'userId',
+        },
+      });
+      }
 }

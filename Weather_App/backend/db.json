@@ -1,6 +1,85 @@
 {
   "users": [],
-  "locations": [],
-  "user_favorites": [],
-  "user_history": []
+  "locations": [
+    {
+      "id": "35cb425d-73ad-4e44-a1c7-e0eb047087c8",
+      "city_name": "Paris",
+      "latitude": 48.8588897,
+      "longitude": 2.3200410217200766
+    },
+    {
+      "id": "36a6d37b-077c-4684-becf-d5c75e038d6e",
+      "city_name": "Malibu",
+      "latitude": 34.035591,
+      "longitude": -118.689423
+    },
+    {
+      "id": "5dcb5216-9cfc-453a-af45-7d09d289bf13",
+      "city_name": "paris",
+      "latitude": 48.8588897,
+      "longitude": 2.3200410217200766
+    },
+    {
+      "id": "44f63b9f-1402-4f2e-84b3-4df6b3a92cfa",
+      "city_name": "Monaco",
+      "latitude": 43.7311424,
+      "longitude": 7.4197576
+    }
+  ],
+  "user_favorites": [
+    {
+      "id": "4b43",
+      "user_id": "1",
+      "location_id": "5dcb5216-9cfc-453a-af45-7d09d289bf13"
+    },
+    {
+      "id": "086d",
+      "user_id": "1",
+      "location_id": "44f63b9f-1402-4f2e-84b3-4df6b3a92cfa"
+    }
+  ],
+  "user_history": [
+    {
+      "id": "47cb634e-0e82-44fa-b4b4-1af68092d5f7",
+      "user_id": "1",
+      "location_id": "35cb425d-73ad-4e44-a1c7-e0eb047087c8",
+      "consulted_at": "2024-12-20T18:46:16.119Z"
+    },
+    {
+      "id": "a128b007-82ee-4d21-af5a-ad51636d3025",
+      "user_id": "1",
+      "location_id": "36a6d37b-077c-4684-becf-d5c75e038d6e",
+      "consulted_at": "2024-12-20T18:46:26.355Z"
+    },
+    {
+      "id": "e8ff85bb-69e5-4885-bf94-78c7c3041c96",
+      "user_id": "1",
+      "location_id": "5dcb5216-9cfc-453a-af45-7d09d289bf13",
+      "consulted_at": "2024-12-20T18:46:40.256Z"
+    },
+    {
+      "id": "20ae08ad-fef4-400c-9803-91a04757bdd5",
+      "user_id": "1",
+      "location_id": "5dcb5216-9cfc-453a-af45-7d09d289bf13",
+      "consulted_at": "2024-12-20T18:46:49.060Z"
+    },
+    {
+      "id": "8e40c210-bc7a-425d-931e-5a8a5dc0cb84",
+      "user_id": "1",
+      "location_id": "35cb425d-73ad-4e44-a1c7-e0eb047087c8",
+      "consulted_at": "2024-12-20T18:48:18.693Z"
+    },
+    {
+      "id": "fb8a2d19-d6d5-4117-971a-c3d5cf60caaf",
+      "user_id": "1",
+      "location_id": "5dcb5216-9cfc-453a-af45-7d09d289bf13",
+      "consulted_at": "2024-12-20T23:54:00.668Z"
+    },
+    {
+      "id": "d2215172-3ad5-47bb-b103-0b514b2386cb",
+      "user_id": "1",
+      "location_id": "44f63b9f-1402-4f2e-84b3-4df6b3a92cfa",
+      "consulted_at": "2024-12-20T23:54:04.417Z"
+    }
+  ]
 }
