@@ -34,10 +34,6 @@ export class HomeComponent implements OnInit {
     const topCities = ['Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice'];
     
     this.userId = this.authService.getUserId()|| '';
-    if (!this.userId) {
-      this.isNotUserConnected = true;
-      return;
-    }
 
     // Top French cities
     topCities.forEach((city) => {
@@ -60,7 +56,6 @@ export class HomeComponent implements OnInit {
     // Favorite cities
     this.favoriteService.getFavoritesByUserId(this.userId).subscribe(
       (filteredFavorites: any[]) => {
-        console.log(filteredFavorites);
         if (filteredFavorites.length === 0) {
           this.isFavoritesEmpty = true;
           return;
@@ -98,6 +93,12 @@ export class HomeComponent implements OnInit {
         console.error('Error fetching favorites by user ID:', error);
       }
     );
+
+
+    if (!this.userId) {
+      this.isNotUserConnected = true;
+      return;
+    }
 
     // Last searched cities
     this.userHistoryService.getUserHistoryByUserId(this.userId).subscribe(
@@ -160,7 +161,6 @@ export class HomeComponent implements OnInit {
   }
 
       NavToFavorites() {
-        console.log(this.userId)
         this.router.navigate(['/favorites', this.userId]);
       }
   

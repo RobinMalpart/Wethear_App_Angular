@@ -1,37 +1,62 @@
-# Wethear_App_Angular
+☀️ Sunny App is front-end a **weather forecasting app** where users can search and save selected cities 🌐 
 
-## Description
+Built with **TypeScript** (**Angular** and **Tailwind/Daisy UI** for the front-end), **OpenWeatherMap** weather API and **JSON server** for the back-end.
 
-### Team Members
 
-- Sara BEVILACQUA
-- Julien CHAZAL
-- Robin MALPART
+## Detailed description
 
-### Project Description
+This weather application lets you explore **real-time weather conditions and forecasts for any city**, with the option to view temperatures in **Fahrenheit** or **Celsius**. It provides current weather updates, a 3-day forecast, and the ability to save favorite cities for quick access. Additionally, you can review the weather for your recently viewed cities, all conveniently displayed on your home page.
 
-This project is a weather application that allows users to search for the weather in a specific city in firenight or celsus.
-The application will display the current weather, the weather for the next 3 days.
-You can favorite cities and see the weather for these cities on your home page.
-You can also see the weather for your last seens cities.
+## PAGES AND MAIN FEATURES
 
-### Technologies
+## Home Page
+![Home](./Assets/home.png)
 
-- Angular 16
-- Tailwind CSS
+- Here an unauthenticated users can only acces the **Top French cities** weather section
+- Authenticated users also have access to the **Last searched cities** and **Favorite Cities** sections
+- On the top of the page there is a **searchbar** where users can enter a location name, choose the temperature type and choose if they want to see the **daily detailed** or the **three days detailed** weather forecast
+
+## Login and Signup Pages
+- Here users can sign up and sign in with a **email** and a **password**
+
+## Location Page
+![Home](./Assets/daily-card.png)
+![Home](./Assets/3-days-card.png)
+- This page is accessed once users enter a city name is the searchbar
+- Two cards can appear: the  **daily detailed** or the **three days detailed** weather forecast.
+- From both of these cards, authenticated users can **add a city to their favorites**
+
+## Last Searches Page
+- On this page authenticated users can see their last searched cities list
+- This page is accessed from the Home Page, by clicking on the **See last Searched** button
+
+## Favorites Page
+- On this page authenticated users can see their favorite cities list
+- This page is accessed from the Home Page, by clicking on the **See Favorites** button
+
 
 ## Installation
 
 ### Prerequisites
 
-- Angular CLI 16
-`npm install -g @angular/cli@16.0.0`
+-  Node.js `v18.20.5`
+- Angular CLI 16 `npm install -g @angular/cli@16.0.0`
 
-### Installation Steps
+### Setting up and launching the server
+1. Clone the repository to your local machine.
+2. Navigate to the `Weather_App` directory  (`cd Weather_App`) and install the required dependencies with `npm install`.
+3. Run the JSON server from the `Weather_App` directory : `npm run json-server`.
+4. Open your browser and navigate to `http://localhost:3000` to acces the api.
 
-1. Clone the repository
-2. Navigate to the project folder `cd Wethear_App`
-3. Run `npm install` to install the dependencies
-4. Run `ng serve` to start the server
-5. Run `npm run json-server` to start the json-server in a new terminal
-6. Open your browser and go to `http://localhost:4200/`
+### Setting up and launching the client
+1. You have cloned the repository on your local machine
+2. Navigate to the `Weather_App` directory and install the required dependencies with `npm install` (if you have not done it yet).
+3. Navigate to the `src` directory and launch the client with `ng serve`.
+4. Open your browser and navigate to `http://localhost:4200` to start using the application.
+5. If you want to have full access to the app's functionalities, please Sign up !
+
+### Authors
+
+- Sara BEVILACQUA
+- Julien CHAZAL
+- Robin MALPART
