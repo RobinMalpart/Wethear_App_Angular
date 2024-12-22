@@ -1,6 +1,6 @@
 <h2>Top French cities</h2>
 <hr class="my-2" />
-<div class="grid grid-cols-6 gap-4 mb-5 pt-3">
+<div class="grid md:grid-cols-6 grid-cols-2 gap-4 mb-5 pt-3">
   <app-card
     *ngFor="let item of topFrenchCity"
     [city]="item.city"
@@ -24,7 +24,7 @@
     Please search some locations to fill this section
   </div>
 </div>
-<div *ngIf="!isUserHistoryEmpty && !isNotUserConnected" class="grid grid-cols-6 gap-4 mb-5 pt-3">
+<div *ngIf="!isUserHistoryEmpty && !isNotUserConnected" class="grid md:grid-cols-6 grid-cols-2 gap-4 mb-5 pt-3">
   <app-card
     *ngFor="let item of lastSeenCity"
     [city]="item.city"
@@ -47,7 +47,7 @@
 <div *ngIf="isFavoritesEmpty && !isNotUserConnected" class="text-gray-500 italic text-center py-5">
   Please add some locations to your favorites to fill this section.
 </div>
-<div *ngIf="!isFavoritesEmpty && !isNotUserConnected" class="grid grid-cols-6 gap-4 mb-5 pt-3">
+<div *ngIf="!isFavoritesEmpty && !isNotUserConnected" class="grid md:grid-cols-6 grid-cols-2 gap-4 mb-0 md:mb-5 pt-3">
   <app-card
     *ngFor="let item of favoriteCity"
     [city]="item.city"

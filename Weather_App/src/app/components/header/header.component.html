@@ -1,4 +1,4 @@
-<div class="container mx-auto flex justify-around items-center" role="main">
+<div class="container mx-auto flex md:flex-row flex-col justify-around" role="main">
   <button routerLink="/home" class="btnGlassHeader">Sunny App</button>
   <form
     [formGroup]="searchForm"
@@ -9,15 +9,15 @@
       type="text"
       formControlName="cityName"
       placeholder="Entrez le nom de la ville"
-      class="input input-bordered w-64 text-black"
+      class="input input-bordered md:w-64 w-40 text-gray-200"
       required
     />
-    <label class="swap flex items-center space-x-2">
+    <label class="swap flex items-center">
       <input type="checkbox" formControlName="unit" (change)="onSubmit()"/>
       <span class="swap-on">°F</span>
       <span class="swap-off">°C</span>
     </label>
-    <div class="dropdown">
+    <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn">
         {{ value }}
         <svg
@@ -34,7 +34,7 @@
       </div>
       <ul
         tabindex="0"
-        class="dropdown-content bg-base-300 rounded-box z-[1] w-52 p-2 shadow-2xl"
+        class="dropdown-content bg-base-300 rounded-box z-[1] md:w-52 w-32 p-2 shadow-2xl"
       >
         <li>
           <input
