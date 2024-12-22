@@ -1,18 +1,31 @@
 <div
   class="card glassmorph bg-white bg-opacity-20 glassBorder p-6 rounded-2xl shadow-lg dark:bg-gray-800"
 >
-<div
-  class="flex flex-col md:flex-row items-center md:justify-between md:space-x-6"
->
+  <div
+    class="flex flex-col md:flex-row items-center md:justify-between md:space-x-6"
+  >
     <div class="text-center md:text-left mb-4 md:mb-0">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
         {{ locationName }}
       </h2>
-      <p class="text-sm text-gray-500 dark:text-gray-300">Weather forecast for the next 3 days</p>
+      <p class="text-sm text-gray-500 dark:text-gray-300">
+        Weather forecast for the next 3 days
+      </p>
     </div>
-    <button class="glassmorph rounded-full" (click)="onToggleFavorite()">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 fill-current" [ngClass]="isFavorite ? 'fill-red-500' : 'fill-white'" viewBox="0 -960 960 960">
-        <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/>
+    <button
+      *ngIf="isAuthenticated"
+      class="glassmorph rounded-full"
+      (click)="onToggleFavorite()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-12 w-12 fill-current"
+        [ngClass]="isFavorite ? 'fill-red-500' : 'fill-white'"
+        viewBox="0 -960 960 960"
+      >
+        <path
+          d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"
+        />
       </svg>
     </button>
   </div>
@@ -21,7 +34,7 @@
 
   <!-- First Day Container -->
   <div *ngIf="firstDayWeather.length > 0">
-    <h3 class="text-md font-bold mb-2 text-black">
+    <h3 class="text-md font-bold mb-2 text-gray-200">
       {{ firstDayWeather[0].day | date : "EEEE, MMMM d" : "" : "en-US" }}
     </h3>
     <div class="overflow-x-auto mb-5">
@@ -30,15 +43,15 @@
           *ngFor="let weather of firstDayWeather"
           class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
         >
-          <p class="font-bold text-gray-900 text-sm">
-            {{ weather.temperature | tempConverter: unit }}°{{ unit }}
+          <p class="font-bold text-gray-200 text-sm">
+            {{ weather.temperature | tempConverter : unit }}°{{ unit }}
           </p>
           <img
             [src]="weather.iconUrl"
             [alt]="weather.weather"
             class="w-10 h-10 my-1"
           />
-          <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+          <p class="text-gray-200 text-xs font-semibold">{{ weather.time }}</p>
         </div>
       </div>
     </div>
@@ -46,7 +59,7 @@
 
   <!-- Second Day Container -->
   <div *ngIf="secondDayWeather.length > 0">
-    <h3 class="text-md font-bold mb-2 text-black">
+    <h3 class="text-md font-bold mb-2 text-gray-200">
       {{ secondDayWeather[0].day | date : "EEEE, MMMM d" : "" : "en-US" }}
     </h3>
     <div class="overflow-x-auto mb-5">
@@ -55,8 +68,8 @@
           *ngFor="let weather of secondDayWeather"
           class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
         >
-          <p class="font-bold text-gray-900 text-sm">
-            {{ weather.temperature | tempConverter: unit}}°{{ unit }}
+          <p class="font-bold text-gray-200 text-sm">
+            {{ weather.temperature | tempConverter : unit }}°{{ unit }}
           </p>
           <img
             [src]="weather.iconUrl"
@@ -64,7 +77,7 @@
             class="w-10 h-10 my-1"
           />
 
-          <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+          <p class="text-gray-200 text-xs font-semibold">{{ weather.time }}</p>
         </div>
       </div>
     </div>
@@ -72,7 +85,7 @@
 
   <!-- Third Day Container -->
   <div *ngIf="thirdDayWeather.length > 0">
-    <h3 class="text-md font-bold mb-2 text-black">
+    <h3 class="text-md font-bold mb-2 text-gray-200">
       {{ thirdDayWeather[0].day | date : "EEEE, MMMM d" : "" : "en-US" }}
     </h3>
     <div class="overflow-x-auto">
@@ -81,15 +94,15 @@
           *ngFor="let weather of thirdDayWeather"
           class="flex-shrink-0 p-4 glassBorder dark:bg-gray-700 rounded-lg shadow-inner flex flex-col items-center w-32"
         >
-          <p class="font-bold text-gray-900 text-sm">
-            {{ weather.temperature | tempConverter: unit }}°{{ unit }}
+          <p class="font-bold text-gray-200 text-sm">
+            {{ weather.temperature | tempConverter : unit }}°{{ unit }}
           </p>
           <img
             [src]="weather.iconUrl"
             [alt]="weather.weather"
             class="w-10 h-10 my-1"
           />
-          <p class="text-gray-900 text-xs font-semibold">{{ weather.time }}</p>
+          <p class="text-gray-200 text-xs font-semibold">{{ weather.time }}</p>
         </div>
       </div>
     </div>

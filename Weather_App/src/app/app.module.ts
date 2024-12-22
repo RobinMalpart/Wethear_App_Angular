@@ -23,7 +23,6 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { LoginComponent } from './pages/login/login.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { SignupComponent } from './pages/signup/signup.component';
-import { ProtectedComponent } from './pages/protected/protected.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +42,6 @@ import { ProtectedComponent } from './pages/protected/protected.component';
     LoginComponent,
     SignupFormComponent,
     SignupComponent,
-    ProtectedComponent,
   ],
   imports: [
     BrowserModule,
