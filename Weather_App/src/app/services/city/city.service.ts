@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { JsonServerService } from '../jsonServer/jsonServer.service';
+import { UserHistoryService } from '../userHistory/userHistory';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +9,9 @@ import { JsonServerService } from '../jsonServer/jsonServer.service';
   
 export class CityService {
 
-  constructor(private http: HttpClient, private jsonService: JsonServerService) { }
+  constructor(private http: HttpClient, private jsonService: UserHistoryService) { }
 
   getCityFromId(id: string): Observable<any> {
-    console.log('id',id);
     return new Observable(observer => {
       this.http.get<any>('http://localhost:3000/locations').subscribe(
         data => {

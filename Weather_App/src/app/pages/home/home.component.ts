@@ -3,7 +3,9 @@ import { WeatherService } from 'src/app/services/weather/weather.service';
 import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 import { CityService } from 'src/app/services/city/city.service';
 import { CityWeather, UserHistory } from 'src/app/models/weather';
-import { JsonServerService } from 'src/app/services/jsonServer/jsonServer.service';
+import { UserHistoryService } from 'src/app/services/userHistory/userHistory';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -17,17 +19,21 @@ export class HomeComponent implements OnInit {
   isUserHistoryEmpty: boolean = false;
   isFavoritesEmpty: boolean = false;
   isNotUserConnected: boolean = false;
+  userId: string = '';
 
   constructor(
     private weatherService: WeatherService,
     private favoriteService: FavoriteService,
     private cityService: CityService,
-    private jsonServerService: JsonServerService
+    private userHistoryService: UserHistoryService,
+    private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     const topCities = ['Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice'];
-    const userId = '1';
+    
+    this.userId = this.authService.getUserId()|| '';
 
     // Top French cities
     topCities.forEach((city) => {
@@ -48,7 +54,7 @@ export class HomeComponent implements OnInit {
     });
 
     // Favorite cities
-    this.favoriteService.getFavoritesByUserId(userId).subscribe(
+    this.favoriteService.getFavoritesByUserId(this.userId).subscribe(
       (filteredFavorites: any[]) => {
         if (filteredFavorites.length === 0) {
           this.isFavoritesEmpty = true;
@@ -88,13 +94,14 @@ export class HomeComponent implements OnInit {
       }
     );
 
-    // Last searched cities
-    if (!userId) {
+
+    if (!this.userId) {
       this.isNotUserConnected = true;
       return;
     }
 
-    this.jsonServerService.getUserHistoryByUserId(userId).subscribe(
+    // Last searched cities
+    this.userHistoryService.getUserHistoryByUserId(this.userId).subscribe(
       (data: UserHistory[]) => {
         if (data.length === 0) {
           this.isUserHistoryEmpty = true;
@@ -112,7 +119,7 @@ export class HomeComponent implements OnInit {
         uniqueHistory.map((history: UserHistory) => {
           const locationId: string = history.location_id;
 
-          this.jsonServerService.getLocationById(locationId).subscribe(
+          this.userHistoryService.getLocationById(locationId).subscribe(
             (location: { city_name: string }) => {
               if (!location || !location.city_name) {
                 console.error(
@@ -152,4 +159,12 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
+      NavToFavorites() {
+        this.router.navigate(['/favorites', this.userId]);
+      }
+  
+      NavToHistory() {
+        this.router.navigate(['/history', this.userId]);
+      }
 }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SharedService } from 'src/app/services/shared/shared.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { MessageService } from 'src/app/services/message/shared.service';
 
 @Component({
   selector: 'app-header',
@@ -13,10 +15,15 @@ export class HeaderComponent implements OnInit {
   value: string = 'Daily';
   errorMessage: string | null = null;
 
+  isAuthenticated: boolean = false;
+  private authSubscription!: Subscription;
+
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private sharedService: SharedService
+    private messageService: MessageService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -26,9 +33,19 @@ export class HeaderComponent implements OnInit {
       timeOption: ['Daily'],
     });
 
-    this.sharedService.errorMessage$.subscribe(message => {
+    this.messageService.errorMessage$.subscribe(message => {
       this.errorMessage = message;
     });
+
+    this.authSubscription = this.authService.userId$.subscribe((userId) => {
+      this.isAuthenticated = !!userId;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   onSubmit(): void {
@@ -50,9 +67,9 @@ export class HeaderComponent implements OnInit {
         });
 
       this.errorMessage = null;
-      this.sharedService.setErrorMessage(null);
+      this.messageService.setErrorMessage(null);
     } else {
-      this.sharedService.setErrorMessage('Please enter a valid city name.');
+      this.messageService.setErrorMessage('Please enter a valid city name.');
     }
   }
 
@@ -60,5 +77,10 @@ export class HeaderComponent implements OnInit {
     this.value = option;
     this.searchForm.get('timeOption')?.setValue(option);
     this.onSubmit();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']); 
   }
 }

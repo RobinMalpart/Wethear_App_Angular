@@ -10,5 +10,5 @@ export class CardComponent {
   @Input() weather!: string;
   @Input() temperature!: number;
   @Input() feelsLike!: number;
-  @Input() icon!: string; // The weather icon URL
+  @Input() icon!: string;
 }

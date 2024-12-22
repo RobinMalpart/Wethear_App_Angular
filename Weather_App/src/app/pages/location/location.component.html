@@ -32,6 +32,7 @@
   [userId]="userId"
   [locationId]="locationId"
   (toggleFavorite)="addFavorite($event.userId, $event.locationId)"
+  class="w-screen md:w-[90%]"
 ></app-daily-detailed-card>
 
 <app-three-days-card
@@ -47,5 +48,6 @@
   [userId]="userId"
   [locationId]="locationId"
   (toggleFavorite)="addFavorite($event.userId, $event.locationId)"
+  class="w-screen md:w-[90%]"
 ></app-three-days-card>
 </div>
